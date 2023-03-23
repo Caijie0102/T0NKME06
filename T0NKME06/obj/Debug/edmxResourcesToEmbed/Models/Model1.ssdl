@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ComponentDetails">
+    <Key>
+      <PropertyRef Name="ComponentDetailsId" />
+    </Key>
+    <Property Name="ComponentDetailsId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="HierarchyTemplateId" Type="uniqueidentifier" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="SysStartTime" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="SysEndTime" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="AuditEventItemId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="DimModelRunOverallRisk">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="OverallRisk" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="HierarchyTemplates">
+    <Key>
+      <PropertyRef Name="HierarchyTemplateId" />
+    </Key>
+    <Property Name="HierarchyTemplateId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="AssetFamilyId" Type="uniqueidentifier" />
+    <Property Name="Description" Type="nvarchar" MaxLength="1000" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="IsPiping" Type="bit" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="SysStartTime" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="SysEndTime" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="AuditEventItemId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="ModelNodeMetadata">
+    <Key>
+      <PropertyRef Name="ModelNodeId" />
+    </Key>
+    <Property Name="ModelNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DefaultOutputNode" Type="bit" Nullable="false" />
+    <Property Name="ModelId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeName" Type="nvarchar" MaxLength="450" />
+    <Property Name="RunOrder" Type="int" Nullable="false" />
+    <Property Name="NodeLabel" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="NodeInputMetadata">
+    <Key>
+      <PropertyRef Name="NodeInputId" />
+      <PropertyRef Name="ModelNodeId" />
+    </Key>
+    <Property Name="NodeInputId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DataType" Type="int" Nullable="false" />
+    <Property Name="DefaultValue" Type="nvarchar" MaxLength="500" />
+    <Property Name="Identifier" Type="nvarchar" MaxLength="100" />
+    <Property Name="Label" Type="nvarchar" MaxLength="200" />
+    <Property Name="ModelNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Required" Type="bit" Nullable="false" />
+    <Property Name="Source" Type="int" Nullable="false" />
+    <Property Name="SourceLookupId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="SourceMapping" Type="nvarchar" MaxLength="500" />
+    <Property Name="UnitOfMeasureId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="GroupName" Type="nvarchar" MaxLength="100" />
+    <Property Name="RiskCategoryType" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NodeOutputMetadata">
+    <Key>
+      <PropertyRef Name="NodeOutputId" />
+      <PropertyRef Name="ModelNodeId" />
+    </Key>
+    <Property Name="NodeOutputId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DataType" Type="int" Nullable="false" />
+    <Property Name="Identifier" Type="nvarchar" MaxLength="100" />
+    <Property Name="Label" Type="nvarchar" MaxLength="200" />
+    <Property Name="ModelNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="UnitOfMeasureId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DisplayOnNodeTab" Type="bit" Nullable="false" />
+    <Property Name="DisplayOnOutputTab" Type="bit" Nullable="false" />
+    <Property Name="GroupName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodeModelRunInputs">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunInputId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunInputId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeInputId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" />
+    <Property Name="DisplayValue" Type="nvarchar(max)" />
+    <Property Name="ModelNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DisplayValueUomId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodeModelRunOutputs">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunOutputId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunOutputId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NodeOutputId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" />
+    <Property Name="DisplayValue" Type="nvarchar(max)" />
+    <Property Name="ModelNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DisplayValueUomId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodeModelRuns">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CreatedBy" Type="nvarchar(max)" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="nvarchar(max)" />
+    <Property Name="LastModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="ModelId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="OrgTreeNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ScenarioType" Type="int" Nullable="false" />
+    <Property Name="AnalysisDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="MassCriticalityRunId" Type="uniqueidentifier" />
+    <Property Name="Comments" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodes">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeId" />
+    </Key>
+    <Property Name="OrgTreeNodeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="255" />
+    <Property Name="Discriminator" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="OrgTreeNodeType" Type="int" Nullable="false" />
+    <Property Name="ParentId" Type="uniqueidentifier" />
+    <Property Name="OrganisationDetailsId" Type="uniqueidentifier" />
+    <Property Name="SiteDetailsId" Type="uniqueidentifier" />
+    <Property Name="AssetDetailsId" Type="uniqueidentifier" />
+    <Property Name="ComponentDetailsId" Type="uniqueidentifier" />
+    <Property Name="LocationDetailsId" Type="uniqueidentifier" />
+    <Property Name="PartDetailsId" Type="uniqueidentifier" />
+    <Property Name="AssetFamilyId" Type="uniqueidentifier" />
+    <Property Name="InstallationDate" Type="datetime2" Precision="7" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+    <Property Name="IsProtectingLocation" Type="bit" />
+    <Property Name="IsProtectingEquipment" Type="bit" />
+    <Property Name="Location_IsProtectingEquipment" Type="bit" />
+    <Property Name="ErpIdentifier" Type="nvarchar" MaxLength="100" />
+    <Property Name="Asset_IntendedMethodology" Type="int" />
+    <Property Name="Component_IntendedMethodology" Type="int" />
+    <Property Name="Location_IntendedMethodology" Type="int" />
+    <Property Name="Part_IntendedMethodology" Type="int" />
+    <Property Name="StatusId" Type="uniqueidentifier" />
+    <Property Name="SysStartTime" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="SysEndTime" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="AuditEventItemId" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityType Name="RiskMatrixConsequenceVectors">
+    <Key>
+      <PropertyRef Name="RiskMatrixConsequenceVectorId" />
+    </Key>
+    <Property Name="RiskMatrixConsequenceVectorId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Index" Type="int" Nullable="false" />
+    <Property Name="Label" Type="nvarchar" MaxLength="200" />
+    <Property Name="RiskMatrixId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RiskMatrixProbabilityVectors">
+    <Key>
+      <PropertyRef Name="RiskMatrixProbabilityVectorId" />
+    </Key>
+    <Property Name="RiskMatrixProbabilityVectorId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Index" Type="int" Nullable="false" />
+    <Property Name="Label" Type="nvarchar" MaxLength="200" />
+    <Property Name="RiskMatrixId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RunnableLookupRowDisplayValues">
+    <Key>
+      <PropertyRef Name="LookupRowId" />
+    </Key>
+    <Property Name="LookupRowId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DisplayValue" Type="nvarchar(max)" />
+    <Property Name="LookupRowIdString" Type="nvarchar" MaxLength="36" />
+  </EntityType>
+  <EntityType Name="RunnableModel">
+    <Key>
+      <PropertyRef Name="ModelId" />
+    </Key>
+    <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+    <Property Name="ModelId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ModelName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="PublishedBy" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="PublishedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="MajorVersion" Type="int" Nullable="false" />
+    <Property Name="MinorVersion" Type="int" Nullable="false" />
+    <Property Name="CreatedBy" Type="nvarchar(max)" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="CustomerId" Type="uniqueidentifier" />
+    <Property Name="DisplayMethodId" Type="uniqueidentifier" />
+    <Property Name="IndustryId" Type="uniqueidentifier" />
+    <Property Name="IntendedTargetId" Type="uniqueidentifier" />
+    <Property Name="LastModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="AssessmentMethodId" Type="uniqueidentifier" />
+    <Property Name="ValidatedBy" Type="nvarchar" MaxLength="200" />
+    <Property Name="ValidatedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="RiskMatrixId" Type="uniqueidentifier" />
+    <Property Name="EquipmentClassId" Type="uniqueidentifier" />
+    <Property Name="EquipmentComponentId" Type="uniqueidentifier" />
+    <Property Name="EquipmentPartId" Type="uniqueidentifier" />
+    <Property Name="EquipmentSubUnitId" Type="uniqueidentifier" />
+    <Property Name="Discriminator" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RiskMatrixFrlEnabled" Type="bit" Nullable="false" />
+    <Property Name="EquipmentClassTypeId" Type="uniqueidentifier" />
+    <Property Name="EquipmentLibraryId" Type="uniqueidentifier" />
+    <Property Name="LastModifiedBy" Type="nvarchar(max)" />
+    <Property Name="MaxInspectionFrequencyForFrl" Type="float" Nullable="false" />
+    <Property Name="MaxRemainingLifeForFrl" Type="float" Nullable="false" />
+    <Property Name="UseFrlMostConservativeValue" Type="bit" Nullable="false" />
+    <Property Name="SourceModel" Type="nvarchar(max)" />
+    <Property Name="SourceModelId" Type="uniqueidentifier" />
+    <Property Name="UseFrlFrequencySourceDetection" Type="bit" Nullable="false" />
+    <Property Name="RunOrder" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
+    <End Role="HierarchyTemplates" Type="Self.HierarchyTemplates" Multiplicity="0..1" />
+    <End Role="ComponentDetails" Type="Self.ComponentDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HierarchyTemplates">
+        <PropertyRef Name="HierarchyTemplateId" />
+      </Principal>
+      <Dependent Role="ComponentDetails">
+        <PropertyRef Name="HierarchyTemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModelNodeMetadata_RunnableModel_ModelId">
+    <End Role="RunnableModel" Type="Self.RunnableModel" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ModelNodeMetadata" Type="Self.ModelNodeMetadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RunnableModel">
+        <PropertyRef Name="ModelId" />
+      </Principal>
+      <Dependent Role="ModelNodeMetadata">
+        <PropertyRef Name="ModelId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId">
+    <End Role="ModelNodeMetadata" Type="Self.ModelNodeMetadata" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeInputMetadata" Type="Self.NodeInputMetadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ModelNodeMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Principal>
+      <Dependent Role="NodeInputMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId">
+    <End Role="ModelNodeMetadata" Type="Self.ModelNodeMetadata" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeOutputMetadata" Type="Self.NodeOutputMetadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ModelNodeMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Principal>
+      <Dependent Role="NodeOutputMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRunInputs" Type="Self.OrgTreeNodeModelRunInputs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRunInputs">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRunOutputs" Type="Self.OrgTreeNodeModelRunOutputs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRunOutputs">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId">
+    <End Role="OrgTreeNodes" Type="Self.OrgTreeNodes" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodes">
+        <PropertyRef Name="OrgTreeNodeId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRuns_RunnableModel_ModelId">
+    <End Role="RunnableModel" Type="Self.RunnableModel" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RunnableModel">
+        <PropertyRef Name="ModelId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="ModelId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId">
+    <End Role="ComponentDetails" Type="Self.ComponentDetails" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodes" Type="Self.OrgTreeNodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ComponentDetails">
+        <PropertyRef Name="ComponentDetailsId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodes">
+        <PropertyRef Name="ComponentDetailsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodes_OrgTreeNodes_ParentId">
+    <End Role="OrgTreeNodes" Type="Self.OrgTreeNodes" Multiplicity="0..1" />
+    <End Role="OrgTreeNodes1" Type="Self.OrgTreeNodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodes">
+        <PropertyRef Name="OrgTreeNodeId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodes1">
+        <PropertyRef Name="ParentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="ComponentDetails" EntityType="Self.ComponentDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DimModelRunOverallRisk" EntityType="Self.DimModelRunOverallRisk" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HierarchyTemplates" EntityType="Self.HierarchyTemplates" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ModelNodeMetadata" EntityType="Self.ModelNodeMetadata" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NodeInputMetadata" EntityType="Self.NodeInputMetadata" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NodeOutputMetadata" EntityType="Self.NodeOutputMetadata" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgTreeNodeModelRunInputs" EntityType="Self.OrgTreeNodeModelRunInputs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgTreeNodeModelRunOutputs" EntityType="Self.OrgTreeNodeModelRunOutputs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgTreeNodeModelRuns" EntityType="Self.OrgTreeNodeModelRuns" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgTreeNodes" EntityType="Self.OrgTreeNodes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RiskMatrixConsequenceVectors" EntityType="Self.RiskMatrixConsequenceVectors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RiskMatrixProbabilityVectors" EntityType="Self.RiskMatrixProbabilityVectors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RunnableLookupRowDisplayValues" EntityType="Self.RunnableLookupRowDisplayValues" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RunnableModel" EntityType="Self.RunnableModel" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" Association="Self.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
+      <End Role="HierarchyTemplates" EntitySet="HierarchyTemplates" />
+      <End Role="ComponentDetails" EntitySet="ComponentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModelNodeMetadata_RunnableModel_ModelId" Association="Self.FK_ModelNodeMetadata_RunnableModel_ModelId">
+      <End Role="RunnableModel" EntitySet="RunnableModel" />
+      <End Role="ModelNodeMetadata" EntitySet="ModelNodeMetadata" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId" Association="Self.FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId">
+      <End Role="ModelNodeMetadata" EntitySet="ModelNodeMetadata" />
+      <End Role="NodeInputMetadata" EntitySet="NodeInputMetadata" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId" Association="Self.FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId">
+      <End Role="ModelNodeMetadata" EntitySet="ModelNodeMetadata" />
+      <End Role="NodeOutputMetadata" EntitySet="NodeOutputMetadata" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" Association="Self.FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+      <End Role="OrgTreeNodeModelRunInputs" EntitySet="OrgTreeNodeModelRunInputs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" Association="Self.FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+      <End Role="OrgTreeNodeModelRunOutputs" EntitySet="OrgTreeNodeModelRunOutputs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId" Association="Self.FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId">
+      <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRuns_RunnableModel_ModelId" Association="Self.FK_OrgTreeNodeModelRuns_RunnableModel_ModelId">
+      <End Role="RunnableModel" EntitySet="RunnableModel" />
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId" Association="Self.FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId">
+      <End Role="ComponentDetails" EntitySet="ComponentDetails" />
+      <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodes_OrgTreeNodes_ParentId" Association="Self.FK_OrgTreeNodes_OrgTreeNodes_ParentId">
+      <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
+      <End Role="OrgTreeNodes1" EntitySet="OrgTreeNodes" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c57dcaff088f42d98e359401ac60eb4c" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.DimModelRunOverallRisk" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ModelNodeMetadata" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.NodeInputMetadata" Width="1.5" PointX="5.25" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.NodeOutputMetadata" Width="1.5" PointX="5.25" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrgTreeNodeModelRunInputs" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrgTreeNodeModelRunOutputs" Width="1.5" PointX="5.25" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrgTreeNodeModelRuns" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrgTreeNodes" Width="1.5" PointX="0.75" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RiskMatrixConsequenceVectors" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RiskMatrixProbabilityVectors" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RunnableLookupRowDisplayValues" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RunnableModel" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_ModelNodeMetadata_RunnableModel_ModelId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_OrgTreeNodeModelRuns_RunnableModel_ModelId" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_OrgTreeNodes_OrgTreeNodes_ParentId" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.ComponentDetails" Width="1.5" PointX="0.75" PointY="22" />
+        <EntityTypeShape EntityType="Model.HierarchyTemplates" Width="1.5" PointX="0.75" PointY="25.75" />
+        <AssociationConnector Association="Model.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" />
+        <AssociationConnector Association="Model.FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="DimModelRunOverallRisk">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunId" Type="Guid" Nullable="false" />
+    <Property Name="OverallRisk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ModelNodeMetadata">
+    <Key>
+      <PropertyRef Name="ModelNodeId" />
+    </Key>
+    <Property Name="ModelNodeId" Type="Guid" Nullable="false" />
+    <Property Name="DefaultOutputNode" Type="Boolean" Nullable="false" />
+    <Property Name="ModelId" Type="Guid" Nullable="false" />
+    <Property Name="NodeId" Type="Guid" Nullable="false" />
+    <Property Name="NodeName" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+    <Property Name="RunOrder" Type="Int32" Nullable="false" />
+    <Property Name="NodeLabel" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="RunnableModel" Relationship="Self.FK_ModelNodeMetadata_RunnableModel_ModelId" FromRole="ModelNodeMetadata" ToRole="RunnableModel" />
+    <NavigationProperty Name="NodeInputMetadata" Relationship="Self.FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId" FromRole="ModelNodeMetadata" ToRole="NodeInputMetadata" />
+    <NavigationProperty Name="NodeOutputMetadata" Relationship="Self.FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId" FromRole="ModelNodeMetadata" ToRole="NodeOutputMetadata" />
+  </EntityType>
+  <EntityType Name="NodeInputMetadata">
+    <Key>
+      <PropertyRef Name="NodeInputId" />
+      <PropertyRef Name="ModelNodeId" />
+    </Key>
+    <Property Name="NodeInputId" Type="Guid" Nullable="false" />
+    <Property Name="DataType" Type="Int32" Nullable="false" />
+    <Property Name="DefaultValue" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Identifier" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Label" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ModelNodeId" Type="Guid" Nullable="false" />
+    <Property Name="NodeId" Type="Guid" Nullable="false" />
+    <Property Name="Required" Type="Boolean" Nullable="false" />
+    <Property Name="Source" Type="Int32" Nullable="false" />
+    <Property Name="SourceLookupId" Type="Guid" Nullable="false" />
+    <Property Name="SourceMapping" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="UnitOfMeasureId" Type="Guid" Nullable="false" />
+    <Property Name="GroupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RiskCategoryType" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ModelNodeMetadata" Relationship="Self.FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId" FromRole="NodeInputMetadata" ToRole="ModelNodeMetadata" />
+  </EntityType>
+  <EntityType Name="NodeOutputMetadata">
+    <Key>
+      <PropertyRef Name="NodeOutputId" />
+      <PropertyRef Name="ModelNodeId" />
+    </Key>
+    <Property Name="NodeOutputId" Type="Guid" Nullable="false" />
+    <Property Name="DataType" Type="Int32" Nullable="false" />
+    <Property Name="Identifier" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Label" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ModelNodeId" Type="Guid" Nullable="false" />
+    <Property Name="NodeId" Type="Guid" Nullable="false" />
+    <Property Name="UnitOfMeasureId" Type="Guid" Nullable="false" />
+    <Property Name="DisplayOnNodeTab" Type="Boolean" Nullable="false" />
+    <Property Name="DisplayOnOutputTab" Type="Boolean" Nullable="false" />
+    <Property Name="GroupName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ModelNodeMetadata" Relationship="Self.FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId" FromRole="NodeOutputMetadata" ToRole="ModelNodeMetadata" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodeModelRunInputs">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunInputId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunInputId" Type="Guid" Nullable="false" />
+    <Property Name="NodeInputId" Type="Guid" Nullable="false" />
+    <Property Name="OrgTreeNodeModelRunId" Type="Guid" Nullable="false" />
+    <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DisplayValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ModelNodeId" Type="Guid" Nullable="false" />
+    <Property Name="DisplayValueUomId" Type="Guid" />
+    <NavigationProperty Name="OrgTreeNodeModelRuns" Relationship="Self.FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" FromRole="OrgTreeNodeModelRunInputs" ToRole="OrgTreeNodeModelRuns" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodeModelRunOutputs">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunOutputId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunOutputId" Type="Guid" Nullable="false" />
+    <Property Name="NodeOutputId" Type="Guid" Nullable="false" />
+    <Property Name="OrgTreeNodeModelRunId" Type="Guid" Nullable="false" />
+    <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DisplayValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ModelNodeId" Type="Guid" Nullable="false" />
+    <Property Name="DisplayValueUomId" Type="Guid" />
+    <NavigationProperty Name="OrgTreeNodeModelRuns" Relationship="Self.FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" FromRole="OrgTreeNodeModelRunOutputs" ToRole="OrgTreeNodeModelRuns" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodeModelRuns">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="LastModifiedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LastModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="ModelId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="OrgTreeNodeId" Type="Guid" Nullable="false" />
+    <Property Name="ScenarioType" Type="Int32" Nullable="false" />
+    <Property Name="AnalysisDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="MassCriticalityRunId" Type="Guid" />
+    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="OrgTreeNodeModelRunInputs" Relationship="Self.FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" FromRole="OrgTreeNodeModelRuns" ToRole="OrgTreeNodeModelRunInputs" />
+    <NavigationProperty Name="OrgTreeNodeModelRunOutputs" Relationship="Self.FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" FromRole="OrgTreeNodeModelRuns" ToRole="OrgTreeNodeModelRunOutputs" />
+    <NavigationProperty Name="OrgTreeNodes" Relationship="Self.FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId" FromRole="OrgTreeNodeModelRuns" ToRole="OrgTreeNodes" />
+    <NavigationProperty Name="RunnableModel" Relationship="Self.FK_OrgTreeNodeModelRuns_RunnableModel_ModelId" FromRole="OrgTreeNodeModelRuns" ToRole="RunnableModel" />
+  </EntityType>
+  <EntityType Name="OrgTreeNodes">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeId" />
+    </Key>
+    <Property Name="OrgTreeNodeId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Discriminator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="OrgTreeNodeType" Type="Int32" Nullable="false" />
+    <Property Name="ParentId" Type="Guid" />
+    <Property Name="OrganisationDetailsId" Type="Guid" />
+    <Property Name="SiteDetailsId" Type="Guid" />
+    <Property Name="AssetDetailsId" Type="Guid" />
+    <Property Name="ComponentDetailsId" Type="Guid" />
+    <Property Name="LocationDetailsId" Type="Guid" />
+    <Property Name="PartDetailsId" Type="Guid" />
+    <Property Name="AssetFamilyId" Type="Guid" />
+    <Property Name="InstallationDate" Type="DateTime" Precision="7" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="IsProtectingLocation" Type="Boolean" />
+    <Property Name="IsProtectingEquipment" Type="Boolean" />
+    <Property Name="Location_IsProtectingEquipment" Type="Boolean" />
+    <Property Name="ErpIdentifier" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Asset_IntendedMethodology" Type="Int32" />
+    <Property Name="Component_IntendedMethodology" Type="Int32" />
+    <Property Name="Location_IntendedMethodology" Type="Int32" />
+    <Property Name="Part_IntendedMethodology" Type="Int32" />
+    <Property Name="StatusId" Type="Guid" />
+    <Property Name="SysStartTime" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="SysEndTime" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="AuditEventItemId" Type="Guid" />
+    <NavigationProperty Name="OrgTreeNodeModelRuns" Relationship="Self.FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId" FromRole="OrgTreeNodes" ToRole="OrgTreeNodeModelRuns" />
+    <NavigationProperty Name="OrgTreeNodes1" Relationship="Self.FK_OrgTreeNodes_OrgTreeNodes_ParentId" FromRole="OrgTreeNodes" ToRole="OrgTreeNodes1" />
+    <NavigationProperty Name="OrgTreeNodes2" Relationship="Self.FK_OrgTreeNodes_OrgTreeNodes_ParentId" FromRole="OrgTreeNodes1" ToRole="OrgTreeNodes" />
+    <NavigationProperty Name="ComponentDetails" Relationship="Model.FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId" FromRole="OrgTreeNodes" ToRole="ComponentDetails" />
+  </EntityType>
+  <EntityType Name="RiskMatrixConsequenceVectors">
+    <Key>
+      <PropertyRef Name="RiskMatrixConsequenceVectorId" />
+    </Key>
+    <Property Name="RiskMatrixConsequenceVectorId" Type="Guid" Nullable="false" />
+    <Property Name="Index" Type="Int32" Nullable="false" />
+    <Property Name="Label" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="RiskMatrixId" Type="Guid" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RiskMatrixProbabilityVectors">
+    <Key>
+      <PropertyRef Name="RiskMatrixProbabilityVectorId" />
+    </Key>
+    <Property Name="RiskMatrixProbabilityVectorId" Type="Guid" Nullable="false" />
+    <Property Name="Index" Type="Int32" Nullable="false" />
+    <Property Name="Label" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="RiskMatrixId" Type="Guid" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RunnableLookupRowDisplayValues">
+    <Key>
+      <PropertyRef Name="LookupRowId" />
+    </Key>
+    <Property Name="LookupRowId" Type="Guid" Nullable="false" />
+    <Property Name="DisplayValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LookupRowIdString" Type="String" MaxLength="36" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="RunnableModel">
+    <Key>
+      <PropertyRef Name="ModelId" />
+    </Key>
+    <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="ModelId" Type="Guid" Nullable="false" />
+    <Property Name="ModelName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PublishedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PublishedDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="MajorVersion" Type="Int32" Nullable="false" />
+    <Property Name="MinorVersion" Type="Int32" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreationDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="CustomerId" Type="Guid" />
+    <Property Name="DisplayMethodId" Type="Guid" />
+    <Property Name="IndustryId" Type="Guid" />
+    <Property Name="IntendedTargetId" Type="Guid" />
+    <Property Name="LastModifiedDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="AssessmentMethodId" Type="Guid" />
+    <Property Name="ValidatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ValidatedDate" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="RiskMatrixId" Type="Guid" />
+    <Property Name="EquipmentClassId" Type="Guid" />
+    <Property Name="EquipmentComponentId" Type="Guid" />
+    <Property Name="EquipmentPartId" Type="Guid" />
+    <Property Name="EquipmentSubUnitId" Type="Guid" />
+    <Property Name="Discriminator" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RiskMatrixFrlEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="EquipmentClassTypeId" Type="Guid" />
+    <Property Name="EquipmentLibraryId" Type="Guid" />
+    <Property Name="LastModifiedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MaxInspectionFrequencyForFrl" Type="Double" Nullable="false" />
+    <Property Name="MaxRemainingLifeForFrl" Type="Double" Nullable="false" />
+    <Property Name="UseFrlMostConservativeValue" Type="Boolean" Nullable="false" />
+    <Property Name="SourceModel" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SourceModelId" Type="Guid" />
+    <Property Name="UseFrlFrequencySourceDetection" Type="Boolean" Nullable="false" />
+    <Property Name="RunOrder" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ModelNodeMetadata" Relationship="Self.FK_ModelNodeMetadata_RunnableModel_ModelId" FromRole="RunnableModel" ToRole="ModelNodeMetadata" />
+    <NavigationProperty Name="OrgTreeNodeModelRuns" Relationship="Self.FK_OrgTreeNodeModelRuns_RunnableModel_ModelId" FromRole="RunnableModel" ToRole="OrgTreeNodeModelRuns" />
+  </EntityType>
+  <Association Name="FK_ModelNodeMetadata_RunnableModel_ModelId">
+    <End Role="RunnableModel" Type="Self.RunnableModel" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ModelNodeMetadata" Type="Self.ModelNodeMetadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RunnableModel">
+        <PropertyRef Name="ModelId" />
+      </Principal>
+      <Dependent Role="ModelNodeMetadata">
+        <PropertyRef Name="ModelId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId">
+    <End Role="ModelNodeMetadata" Type="Self.ModelNodeMetadata" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeInputMetadata" Type="Self.NodeInputMetadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ModelNodeMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Principal>
+      <Dependent Role="NodeInputMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId">
+    <End Role="ModelNodeMetadata" Type="Self.ModelNodeMetadata" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="NodeOutputMetadata" Type="Self.NodeOutputMetadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ModelNodeMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Principal>
+      <Dependent Role="NodeOutputMetadata">
+        <PropertyRef Name="ModelNodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRunInputs" Type="Self.OrgTreeNodeModelRunInputs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRunInputs">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRunOutputs" Type="Self.OrgTreeNodeModelRunOutputs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRunOutputs">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId">
+    <End Role="OrgTreeNodes" Type="Self.OrgTreeNodes" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodes">
+        <PropertyRef Name="OrgTreeNodeId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodeModelRuns_RunnableModel_ModelId">
+    <End Role="RunnableModel" Type="Self.RunnableModel" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RunnableModel">
+        <PropertyRef Name="ModelId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="ModelId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodes_OrgTreeNodes_ParentId">
+    <End Role="OrgTreeNodes" Type="Self.OrgTreeNodes" Multiplicity="0..1" />
+    <End Role="OrgTreeNodes1" Type="Self.OrgTreeNodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodes">
+        <PropertyRef Name="OrgTreeNodeId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodes1">
+        <PropertyRef Name="ParentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DimModelRunOverallRisk" EntityType="Self.DimModelRunOverallRisk" />
+    <EntitySet Name="ModelNodeMetadata" EntityType="Self.ModelNodeMetadata" />
+    <EntitySet Name="NodeInputMetadata" EntityType="Self.NodeInputMetadata" />
+    <EntitySet Name="NodeOutputMetadata" EntityType="Self.NodeOutputMetadata" />
+    <EntitySet Name="OrgTreeNodeModelRunInputs" EntityType="Self.OrgTreeNodeModelRunInputs" />
+    <EntitySet Name="OrgTreeNodeModelRunOutputs" EntityType="Self.OrgTreeNodeModelRunOutputs" />
+    <EntitySet Name="OrgTreeNodeModelRuns" EntityType="Self.OrgTreeNodeModelRuns" />
+    <EntitySet Name="OrgTreeNodes" EntityType="Self.OrgTreeNodes" />
+    <EntitySet Name="RiskMatrixConsequenceVectors" EntityType="Self.RiskMatrixConsequenceVectors" />
+    <EntitySet Name="RiskMatrixProbabilityVectors" EntityType="Self.RiskMatrixProbabilityVectors" />
+    <EntitySet Name="RunnableLookupRowDisplayValues" EntityType="Self.RunnableLookupRowDisplayValues" />
+    <EntitySet Name="RunnableModel" EntityType="Self.RunnableModel" />
+    <AssociationSet Name="FK_ModelNodeMetadata_RunnableModel_ModelId" Association="Self.FK_ModelNodeMetadata_RunnableModel_ModelId">
+      <End Role="RunnableModel" EntitySet="RunnableModel" />
+      <End Role="ModelNodeMetadata" EntitySet="ModelNodeMetadata" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId" Association="Self.FK_NodeInputMetadata_ModelNodeMetadata_ModelNodeId">
+      <End Role="ModelNodeMetadata" EntitySet="ModelNodeMetadata" />
+      <End Role="NodeInputMetadata" EntitySet="NodeInputMetadata" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId" Association="Self.FK_NodeOutputMetadata_ModelNodeMetadata_ModelNodeId">
+      <End Role="ModelNodeMetadata" EntitySet="ModelNodeMetadata" />
+      <End Role="NodeOutputMetadata" EntitySet="NodeOutputMetadata" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" Association="Self.FK_OrgTreeNodeModelRunInputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+      <End Role="OrgTreeNodeModelRunInputs" EntitySet="OrgTreeNodeModelRunInputs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" Association="Self.FK_OrgTreeNodeModelRunOutputs_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+      <End Role="OrgTreeNodeModelRunOutputs" EntitySet="OrgTreeNodeModelRunOutputs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId" Association="Self.FK_OrgTreeNodeModelRuns_OrgTreeNodes_OrgTreeNodeId">
+      <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodeModelRuns_RunnableModel_ModelId" Association="Self.FK_OrgTreeNodeModelRuns_RunnableModel_ModelId">
+      <End Role="RunnableModel" EntitySet="RunnableModel" />
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodes_OrgTreeNodes_ParentId" Association="Self.FK_OrgTreeNodes_OrgTreeNodes_ParentId">
+      <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
+      <End Role="OrgTreeNodes1" EntitySet="OrgTreeNodes" />
+    </AssociationSet>
+    <EntitySet Name="ComponentDetails" EntityType="Model.ComponentDetails" />
+    <EntitySet Name="HierarchyTemplates" EntityType="Model.HierarchyTemplates" />
+    <AssociationSet Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" Association="Model.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
+      <End Role="HierarchyTemplates" EntitySet="HierarchyTemplates" />
+      <End Role="ComponentDetails" EntitySet="ComponentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId" Association="Model.FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId">
+      <End Role="ComponentDetails" EntitySet="ComponentDetails" />
+      <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ComponentDetails">
+    <Key>
+      <PropertyRef Name="ComponentDetailsId" />
+    </Key>
+    <Property Name="ComponentDetailsId" Type="Guid" Nullable="false" />
+    <Property Name="HierarchyTemplateId" Type="Guid" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="SysStartTime" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="SysEndTime" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="AuditEventItemId" Type="Guid" />
+    <NavigationProperty Name="HierarchyTemplates" Relationship="Model.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" FromRole="ComponentDetails" ToRole="HierarchyTemplates" />
+    <NavigationProperty Name="OrgTreeNodes" Relationship="Model.FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId" FromRole="ComponentDetails" ToRole="OrgTreeNodes" />
+  </EntityType>
+  <EntityType Name="HierarchyTemplates">
+    <Key>
+      <PropertyRef Name="HierarchyTemplateId" />
+    </Key>
+    <Property Name="HierarchyTemplateId" Type="Guid" Nullable="false" />
+    <Property Name="AssetFamilyId" Type="Guid" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="IsPiping" Type="Boolean" Nullable="false" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <Property Name="SysStartTime" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="SysEndTime" Type="DateTime" Nullable="false" Precision="7" />
+    <Property Name="AuditEventItemId" Type="Guid" />
+    <NavigationProperty Name="ComponentDetails" Relationship="Model.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" FromRole="HierarchyTemplates" ToRole="ComponentDetails" />
+  </EntityType>
+  <Association Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
+    <End Type="Model.HierarchyTemplates" Role="HierarchyTemplates" Multiplicity="0..1" />
+    <End Type="Model.ComponentDetails" Role="ComponentDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HierarchyTemplates">
+        <PropertyRef Name="HierarchyTemplateId" />
+      </Principal>
+      <Dependent Role="ComponentDetails">
+        <PropertyRef Name="HierarchyTemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId">
+    <End Type="Model.ComponentDetails" Role="ComponentDetails" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.OrgTreeNodes" Role="OrgTreeNodes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ComponentDetails">
+        <PropertyRef Name="ComponentDetailsId" />
+      </Principal>
+      <Dependent Role="OrgTreeNodes">
+        <PropertyRef Name="ComponentDetailsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

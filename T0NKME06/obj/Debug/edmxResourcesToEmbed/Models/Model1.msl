@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities2">
+    <EntitySetMapping Name="DimModelRunOverallRisk">
+      <EntityTypeMapping TypeName="Model.DimModelRunOverallRisk">
+        <MappingFragment StoreEntitySet="DimModelRunOverallRisk">
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+          <ScalarProperty Name="OverallRisk" ColumnName="OverallRisk" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ModelNodeMetadata">
+      <EntityTypeMapping TypeName="Model.ModelNodeMetadata">
+        <MappingFragment StoreEntitySet="ModelNodeMetadata">
+          <ScalarProperty Name="ModelNodeId" ColumnName="ModelNodeId" />
+          <ScalarProperty Name="DefaultOutputNode" ColumnName="DefaultOutputNode" />
+          <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+          <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+          <ScalarProperty Name="NodeName" ColumnName="NodeName" />
+          <ScalarProperty Name="RunOrder" ColumnName="RunOrder" />
+          <ScalarProperty Name="NodeLabel" ColumnName="NodeLabel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NodeInputMetadata">
+      <EntityTypeMapping TypeName="Model.NodeInputMetadata">
+        <MappingFragment StoreEntitySet="NodeInputMetadata">
+          <ScalarProperty Name="NodeInputId" ColumnName="NodeInputId" />
+          <ScalarProperty Name="DataType" ColumnName="DataType" />
+          <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+          <ScalarProperty Name="Identifier" ColumnName="Identifier" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="ModelNodeId" ColumnName="ModelNodeId" />
+          <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+          <ScalarProperty Name="Required" ColumnName="Required" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="SourceLookupId" ColumnName="SourceLookupId" />
+          <ScalarProperty Name="SourceMapping" ColumnName="SourceMapping" />
+          <ScalarProperty Name="UnitOfMeasureId" ColumnName="UnitOfMeasureId" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="RiskCategoryType" ColumnName="RiskCategoryType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NodeOutputMetadata">
+      <EntityTypeMapping TypeName="Model.NodeOutputMetadata">
+        <MappingFragment StoreEntitySet="NodeOutputMetadata">
+          <ScalarProperty Name="NodeOutputId" ColumnName="NodeOutputId" />
+          <ScalarProperty Name="DataType" ColumnName="DataType" />
+          <ScalarProperty Name="Identifier" ColumnName="Identifier" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="ModelNodeId" ColumnName="ModelNodeId" />
+          <ScalarProperty Name="NodeId" ColumnName="NodeId" />
+          <ScalarProperty Name="UnitOfMeasureId" ColumnName="UnitOfMeasureId" />
+          <ScalarProperty Name="DisplayOnNodeTab" ColumnName="DisplayOnNodeTab" />
+          <ScalarProperty Name="DisplayOnOutputTab" ColumnName="DisplayOnOutputTab" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgTreeNodeModelRunInputs">
+      <EntityTypeMapping TypeName="Model.OrgTreeNodeModelRunInputs">
+        <MappingFragment StoreEntitySet="OrgTreeNodeModelRunInputs">
+          <ScalarProperty Name="OrgTreeNodeModelRunInputId" ColumnName="OrgTreeNodeModelRunInputId" />
+          <ScalarProperty Name="NodeInputId" ColumnName="NodeInputId" />
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="DisplayValue" ColumnName="DisplayValue" />
+          <ScalarProperty Name="ModelNodeId" ColumnName="ModelNodeId" />
+          <ScalarProperty Name="DisplayValueUomId" ColumnName="DisplayValueUomId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgTreeNodeModelRunOutputs">
+      <EntityTypeMapping TypeName="Model.OrgTreeNodeModelRunOutputs">
+        <MappingFragment StoreEntitySet="OrgTreeNodeModelRunOutputs">
+          <ScalarProperty Name="OrgTreeNodeModelRunOutputId" ColumnName="OrgTreeNodeModelRunOutputId" />
+          <ScalarProperty Name="NodeOutputId" ColumnName="NodeOutputId" />
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="DisplayValue" ColumnName="DisplayValue" />
+          <ScalarProperty Name="ModelNodeId" ColumnName="ModelNodeId" />
+          <ScalarProperty Name="DisplayValueUomId" ColumnName="DisplayValueUomId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgTreeNodeModelRuns">
+      <EntityTypeMapping TypeName="Model.OrgTreeNodeModelRuns">
+        <MappingFragment StoreEntitySet="OrgTreeNodeModelRuns">
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="OrgTreeNodeId" ColumnName="OrgTreeNodeId" />
+          <ScalarProperty Name="ScenarioType" ColumnName="ScenarioType" />
+          <ScalarProperty Name="AnalysisDate" ColumnName="AnalysisDate" />
+          <ScalarProperty Name="MassCriticalityRunId" ColumnName="MassCriticalityRunId" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgTreeNodes">
+      <EntityTypeMapping TypeName="Model.OrgTreeNodes">
+        <MappingFragment StoreEntitySet="OrgTreeNodes">
+          <ScalarProperty Name="OrgTreeNodeId" ColumnName="OrgTreeNodeId" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="OrgTreeNodeType" ColumnName="OrgTreeNodeType" />
+          <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+          <ScalarProperty Name="OrganisationDetailsId" ColumnName="OrganisationDetailsId" />
+          <ScalarProperty Name="SiteDetailsId" ColumnName="SiteDetailsId" />
+          <ScalarProperty Name="AssetDetailsId" ColumnName="AssetDetailsId" />
+          <ScalarProperty Name="ComponentDetailsId" ColumnName="ComponentDetailsId" />
+          <ScalarProperty Name="LocationDetailsId" ColumnName="LocationDetailsId" />
+          <ScalarProperty Name="PartDetailsId" ColumnName="PartDetailsId" />
+          <ScalarProperty Name="AssetFamilyId" ColumnName="AssetFamilyId" />
+          <ScalarProperty Name="InstallationDate" ColumnName="InstallationDate" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="IsProtectingLocation" ColumnName="IsProtectingLocation" />
+          <ScalarProperty Name="IsProtectingEquipment" ColumnName="IsProtectingEquipment" />
+          <ScalarProperty Name="Location_IsProtectingEquipment" ColumnName="Location_IsProtectingEquipment" />
+          <ScalarProperty Name="ErpIdentifier" ColumnName="ErpIdentifier" />
+          <ScalarProperty Name="Asset_IntendedMethodology" ColumnName="Asset_IntendedMethodology" />
+          <ScalarProperty Name="Component_IntendedMethodology" ColumnName="Component_IntendedMethodology" />
+          <ScalarProperty Name="Location_IntendedMethodology" ColumnName="Location_IntendedMethodology" />
+          <ScalarProperty Name="Part_IntendedMethodology" ColumnName="Part_IntendedMethodology" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="SysStartTime" ColumnName="SysStartTime" />
+          <ScalarProperty Name="SysEndTime" ColumnName="SysEndTime" />
+          <ScalarProperty Name="AuditEventItemId" ColumnName="AuditEventItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RiskMatrixConsequenceVectors">
+      <EntityTypeMapping TypeName="Model.RiskMatrixConsequenceVectors">
+        <MappingFragment StoreEntitySet="RiskMatrixConsequenceVectors">
+          <ScalarProperty Name="RiskMatrixConsequenceVectorId" ColumnName="RiskMatrixConsequenceVectorId" />
+          <ScalarProperty Name="Index" ColumnName="Index" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="RiskMatrixId" ColumnName="RiskMatrixId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RiskMatrixProbabilityVectors">
+      <EntityTypeMapping TypeName="Model.RiskMatrixProbabilityVectors">
+        <MappingFragment StoreEntitySet="RiskMatrixProbabilityVectors">
+          <ScalarProperty Name="RiskMatrixProbabilityVectorId" ColumnName="RiskMatrixProbabilityVectorId" />
+          <ScalarProperty Name="Index" ColumnName="Index" />
+          <ScalarProperty Name="Label" ColumnName="Label" />
+          <ScalarProperty Name="RiskMatrixId" ColumnName="RiskMatrixId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RunnableLookupRowDisplayValues">
+      <EntityTypeMapping TypeName="Model.RunnableLookupRowDisplayValues">
+        <MappingFragment StoreEntitySet="RunnableLookupRowDisplayValues">
+          <ScalarProperty Name="LookupRowId" ColumnName="LookupRowId" />
+          <ScalarProperty Name="DisplayValue" ColumnName="DisplayValue" />
+          <ScalarProperty Name="LookupRowIdString" ColumnName="LookupRowIdString" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RunnableModel">
+      <EntityTypeMapping TypeName="Model.RunnableModel">
+        <MappingFragment StoreEntitySet="RunnableModel">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+          <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+          <ScalarProperty Name="PublishedBy" ColumnName="PublishedBy" />
+          <ScalarProperty Name="PublishedDate" ColumnName="PublishedDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="MajorVersion" ColumnName="MajorVersion" />
+          <ScalarProperty Name="MinorVersion" ColumnName="MinorVersion" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="DisplayMethodId" ColumnName="DisplayMethodId" />
+          <ScalarProperty Name="IndustryId" ColumnName="IndustryId" />
+          <ScalarProperty Name="IntendedTargetId" ColumnName="IntendedTargetId" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="AssessmentMethodId" ColumnName="AssessmentMethodId" />
+          <ScalarProperty Name="ValidatedBy" ColumnName="ValidatedBy" />
+          <ScalarProperty Name="ValidatedDate" ColumnName="ValidatedDate" />
+          <ScalarProperty Name="RiskMatrixId" ColumnName="RiskMatrixId" />
+          <ScalarProperty Name="EquipmentClassId" ColumnName="EquipmentClassId" />
+          <ScalarProperty Name="EquipmentComponentId" ColumnName="EquipmentComponentId" />
+          <ScalarProperty Name="EquipmentPartId" ColumnName="EquipmentPartId" />
+          <ScalarProperty Name="EquipmentSubUnitId" ColumnName="EquipmentSubUnitId" />
+          <ScalarProperty Name="Discriminator" ColumnName="Discriminator" />
+          <ScalarProperty Name="RiskMatrixFrlEnabled" ColumnName="RiskMatrixFrlEnabled" />
+          <ScalarProperty Name="EquipmentClassTypeId" ColumnName="EquipmentClassTypeId" />
+          <ScalarProperty Name="EquipmentLibraryId" ColumnName="EquipmentLibraryId" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="MaxInspectionFrequencyForFrl" ColumnName="MaxInspectionFrequencyForFrl" />
+          <ScalarProperty Name="MaxRemainingLifeForFrl" ColumnName="MaxRemainingLifeForFrl" />
+          <ScalarProperty Name="UseFrlMostConservativeValue" ColumnName="UseFrlMostConservativeValue" />
+          <ScalarProperty Name="SourceModel" ColumnName="SourceModel" />
+          <ScalarProperty Name="SourceModelId" ColumnName="SourceModelId" />
+          <ScalarProperty Name="UseFrlFrequencySourceDetection" ColumnName="UseFrlFrequencySourceDetection" />
+          <ScalarProperty Name="RunOrder" ColumnName="RunOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ComponentDetails">
+      <EntityTypeMapping TypeName="Model.ComponentDetails">
+        <MappingFragment StoreEntitySet="ComponentDetails">
+          <ScalarProperty Name="AuditEventItemId" ColumnName="AuditEventItemId" />
+          <ScalarProperty Name="SysEndTime" ColumnName="SysEndTime" />
+          <ScalarProperty Name="SysStartTime" ColumnName="SysStartTime" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="HierarchyTemplateId" ColumnName="HierarchyTemplateId" />
+          <ScalarProperty Name="ComponentDetailsId" ColumnName="ComponentDetailsId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HierarchyTemplates">
+      <EntityTypeMapping TypeName="Model.HierarchyTemplates">
+        <MappingFragment StoreEntitySet="HierarchyTemplates">
+          <ScalarProperty Name="AuditEventItemId" ColumnName="AuditEventItemId" />
+          <ScalarProperty Name="SysEndTime" ColumnName="SysEndTime" />
+          <ScalarProperty Name="SysStartTime" ColumnName="SysStartTime" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+          <ScalarProperty Name="IsPiping" ColumnName="IsPiping" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="AssetFamilyId" ColumnName="AssetFamilyId" />
+          <ScalarProperty Name="HierarchyTemplateId" ColumnName="HierarchyTemplateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
