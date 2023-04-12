@@ -29,6 +29,16 @@
         <EntityTypeShape EntityType="Model.HierarchyTemplates" Width="1.5" PointX="0.75" PointY="25.75" />
         <AssociationConnector Association="Model.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" />
         <AssociationConnector Association="Model.FK_OrgTreeNodes_ComponentDetails_ComponentDetailsId" />
+        <EntityTypeShape EntityType="Model.InspectionPlans" Width="1.5" PointX="5.25" PointY="25.125" />
+        <EntityTypeShape EntityType="Model.InspectionPlanTaskMitigationColumns" Width="1.5" PointX="9.75" PointY="25.5" />
+        <EntityTypeShape EntityType="Model.InspectionPlanTasks" Width="1.5" PointX="7.5" PointY="22.625" />
+        <EntityTypeShape EntityType="Model.MitigationColumns" Width="1.5" PointX="7.5" PointY="19.375" />
+        <EntityTypeShape EntityType="Model.Recommendations" Width="1.5" PointX="5.25" PointY="17.875" />
+        <AssociationConnector Association="Model.FK_InspectionPlans_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" />
+        <AssociationConnector Association="Model.FK_InspectionPlanTasks_InspectionPlans_InspectionPlanId" />
+        <AssociationConnector Association="Model.FK_InspectionPlanTaskMitigationColumns_InspectionPlanTasks_InspectionPlanTaskId" />
+        <AssociationConnector Association="Model.FK_InspectionPlanTaskMitigationColumns_MitigationColumns_MitigationColumnId" />
+        <AssociationConnector Association="Model.FK_Recommendations_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

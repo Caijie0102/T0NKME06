@@ -184,11 +184,8 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\T0NKME0601Controller.cs" />
-    <Compile Include="Controllers\T0NKME0602Controller.cs" />
-    <Compile Include="Controllers\T0NKME0603Controller.cs" />
-    <Compile Include="Controllers\T0NKME0604Controller.cs" />
-    <Compile Include="Controllers\T0NKME0605Controller.cs" />
-    <Compile Include="Controllers\T0NKME06Controller.cs" />
+    <Compile Include="Controllers\T0NKME07Controller.cs" />
+    <Compile Include="Controllers\T0NKME08Controller.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Extensions\ExcelExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -201,6 +198,18 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\HierarchyTemplates.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InspectionPlans.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InspectionPlanTaskMitigationColumns.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InspectionPlanTasks.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MitigationColumns.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Model1.Context.cs">
@@ -239,6 +248,9 @@
     <Compile Include="Models\OrgTreeNodes.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Recommendations.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RiskMatrixConsequenceVectors.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -252,6 +264,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\T0NKME06model.cs" />
+    <Compile Include="Models\T0NKME07model.cs" />
+    <Compile Include="Models\T0NKME0801Controller.cs" />
+    <Compile Include="Models\T0NKME08model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +346,10 @@
     <Folder Include="Views\T0NKME0604\" />
     <Folder Include="Views\T0NKME0605\" />
     <Folder Include="Views\T0NKME06\" />
+    <Folder Include="Views\T0NKME0701\" />
+    <Folder Include="Views\T0NKME07\" />
+    <Folder Include="Views\T0NKME0801\" />
+    <Folder Include="Views\T0NKME08\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -236,5 +236,102 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="InspectionPlans">
+      <EntityTypeMapping TypeName="Model.InspectionPlans">
+        <MappingFragment StoreEntitySet="InspectionPlans">
+          <ScalarProperty Name="InspectionPlanStatus" ColumnName="InspectionPlanStatus" />
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="InspectionPlanId" ColumnName="InspectionPlanId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InspectionPlanTaskMitigationColumns">
+      <EntityTypeMapping TypeName="Model.InspectionPlanTaskMitigationColumns">
+        <MappingFragment StoreEntitySet="InspectionPlanTaskMitigationColumns">
+          <ScalarProperty Name="CellText" ColumnName="CellText" />
+          <ScalarProperty Name="MitigationColumnId" ColumnName="MitigationColumnId" />
+          <ScalarProperty Name="InspectionPlanTaskId" ColumnName="InspectionPlanTaskId" />
+          <ScalarProperty Name="InspectionPlanTaskMitigationColumnId" ColumnName="InspectionPlanTaskMitigationColumnId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InspectionPlanTasks">
+      <EntityTypeMapping TypeName="Model.InspectionPlanTasks">
+        <MappingFragment StoreEntitySet="InspectionPlanTasks">
+          <ScalarProperty Name="ManualLastInspectionDate" ColumnName="ManualLastInspectionDate" />
+          <ScalarProperty Name="LastInspectionDateSource" ColumnName="LastInspectionDateSource" />
+          <ScalarProperty Name="MasterInspectionMethodId" ColumnName="MasterInspectionMethodId" />
+          <ScalarProperty Name="HistoricInspectionDate" ColumnName="HistoricInspectionDate" />
+          <ScalarProperty Name="ErpWorkOrderUserStatus" ColumnName="ErpWorkOrderUserStatus" />
+          <ScalarProperty Name="ErpReportedBy" ColumnName="ErpReportedBy" />
+          <ScalarProperty Name="ErpNotificationUserStatus" ColumnName="ErpNotificationUserStatus" />
+          <ScalarProperty Name="SendToErp" ColumnName="SendToErp" />
+          <ScalarProperty Name="ErpWorkOrderSystemStatus" ColumnName="ErpWorkOrderSystemStatus" />
+          <ScalarProperty Name="ErpWorkOrderNumber" ColumnName="ErpWorkOrderNumber" />
+          <ScalarProperty Name="ErpNotificationSystemStatus" ColumnName="ErpNotificationSystemStatus" />
+          <ScalarProperty Name="ErpNotificationNumber" ColumnName="ErpNotificationNumber" />
+          <ScalarProperty Name="ErpMaintenancePlanNumber" ColumnName="ErpMaintenancePlanNumber" />
+          <ScalarProperty Name="LastInspectionDateOverriden" ColumnName="LastInspectionDateOverriden" />
+          <ScalarProperty Name="OverrideFrequency" ColumnName="OverrideFrequency" />
+          <ScalarProperty Name="MitigationSource" ColumnName="MitigationSource" />
+          <ScalarProperty Name="FrequencySource" ColumnName="FrequencySource" />
+          <ScalarProperty Name="IsStaticDueDate" ColumnName="IsStaticDueDate" />
+          <ScalarProperty Name="LastInspectionId" ColumnName="LastInspectionId" />
+          <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+          <ScalarProperty Name="SourceType" ColumnName="SourceType" />
+          <ScalarProperty Name="MitigationType" ColumnName="MitigationType" />
+          <ScalarProperty Name="TaskReference" ColumnName="TaskReference" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="TaskInterval" ColumnName="TaskInterval" />
+          <ScalarProperty Name="TaskFrequency" ColumnName="TaskFrequency" />
+          <ScalarProperty Name="TaskExtent" ColumnName="TaskExtent" />
+          <ScalarProperty Name="RowIndex" ColumnName="RowIndex" />
+          <ScalarProperty Name="RecommendationId" ColumnName="RecommendationId" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="InspectionPlanId" ColumnName="InspectionPlanId" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="InspectionPlanTaskId" ColumnName="InspectionPlanTaskId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MitigationColumns">
+      <EntityTypeMapping TypeName="Model.MitigationColumns">
+        <MappingFragment StoreEntitySet="MitigationColumns">
+          <ScalarProperty Name="FilterTagMitigationFilterTagId" ColumnName="FilterTagMitigationFilterTagId" />
+          <ScalarProperty Name="MitigationsId" ColumnName="MitigationsId" />
+          <ScalarProperty Name="IsDisplayed" ColumnName="IsDisplayed" />
+          <ScalarProperty Name="HeaderText" ColumnName="HeaderText" />
+          <ScalarProperty Name="ColumnIndex" ColumnName="ColumnIndex" />
+          <ScalarProperty Name="MitigationColumnId" ColumnName="MitigationColumnId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recommendations">
+      <EntityTypeMapping TypeName="Model.Recommendations">
+        <MappingFragment StoreEntitySet="Recommendations">
+          <ScalarProperty Name="MasterInspectionMethodId" ColumnName="MasterInspectionMethodId" />
+          <ScalarProperty Name="MitigationRowId" ColumnName="MitigationRowId" />
+          <ScalarProperty Name="LastInspectionDateOverriden" ColumnName="LastInspectionDateOverriden" />
+          <ScalarProperty Name="OverrideFrequency" ColumnName="OverrideFrequency" />
+          <ScalarProperty Name="MitigationSource" ColumnName="MitigationSource" />
+          <ScalarProperty Name="DisplayedMitigationColumns" ColumnName="DisplayedMitigationColumns" />
+          <ScalarProperty Name="MitigationType" ColumnName="MitigationType" />
+          <ScalarProperty Name="TaskReference" ColumnName="TaskReference" />
+          <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+          <ScalarProperty Name="TaskInterval" ColumnName="TaskInterval" />
+          <ScalarProperty Name="TaskFrequency" ColumnName="TaskFrequency" />
+          <ScalarProperty Name="TaskExtent" ColumnName="TaskExtent" />
+          <ScalarProperty Name="RowIndex" ColumnName="RowIndex" />
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+          <ScalarProperty Name="RecommendationId" ColumnName="RecommendationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

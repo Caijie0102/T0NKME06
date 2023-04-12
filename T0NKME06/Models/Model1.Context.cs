@@ -39,5 +39,10 @@ namespace T0NKME06.Models
         public virtual DbSet<RunnableModel> RunnableModel { get; set; }
         public virtual DbSet<ComponentDetails> ComponentDetails { get; set; }
         public virtual DbSet<HierarchyTemplates> HierarchyTemplates { get; set; }
+        public virtual DbSet<InspectionPlans> InspectionPlans { get; set; }
+        public virtual DbSet<InspectionPlanTaskMitigationColumns> InspectionPlanTaskMitigationColumns { get; set; }
+        public virtual DbSet<InspectionPlanTasks> InspectionPlanTasks { get; set; }
+        public virtual DbSet<MitigationColumns> MitigationColumns { get; set; }
+        public virtual DbSet<Recommendations> Recommendations { get; set; }
     }
 }

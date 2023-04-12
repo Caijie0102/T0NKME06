@@ -19,6 +19,8 @@ namespace T0NKME06.Models
         {
             this.OrgTreeNodeModelRunInputs = new HashSet<OrgTreeNodeModelRunInputs>();
             this.OrgTreeNodeModelRunOutputs = new HashSet<OrgTreeNodeModelRunOutputs>();
+            this.InspectionPlans = new HashSet<InspectionPlans>();
+            this.Recommendations = new HashSet<Recommendations>();
         }
     
         public System.Guid OrgTreeNodeModelRunId { get; set; }
@@ -40,5 +42,9 @@ namespace T0NKME06.Models
         public virtual ICollection<OrgTreeNodeModelRunOutputs> OrgTreeNodeModelRunOutputs { get; set; }
         public virtual OrgTreeNodes OrgTreeNodes { get; set; }
         public virtual RunnableModel RunnableModel { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InspectionPlans> InspectionPlans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Recommendations> Recommendations { get; set; }
     }
 }

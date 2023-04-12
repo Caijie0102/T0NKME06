@@ -32,6 +32,78 @@
     <Property Name="SysEndTime" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="AuditEventItemId" Type="uniqueidentifier" />
   </EntityType>
+  <EntityType Name="InspectionPlans">
+    <Key>
+      <PropertyRef Name="InspectionPlanId" />
+    </Key>
+    <Property Name="InspectionPlanId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CreatedBy" Type="nvarchar(max)" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="nvarchar(max)" />
+    <Property Name="LastModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="InspectionPlanStatus" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="InspectionPlanTaskMitigationColumns">
+    <Key>
+      <PropertyRef Name="InspectionPlanTaskMitigationColumnId" />
+    </Key>
+    <Property Name="InspectionPlanTaskMitigationColumnId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="InspectionPlanTaskId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="MitigationColumnId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CellText" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="InspectionPlanTasks">
+    <Key>
+      <PropertyRef Name="InspectionPlanTaskId" />
+    </Key>
+    <Property Name="InspectionPlanTaskId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CreatedBy" Type="nvarchar(max)" />
+    <Property Name="CreationDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="InspectionPlanId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="nvarchar(max)" />
+    <Property Name="LastModifiedDate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="RecommendationId" Type="uniqueidentifier" />
+    <Property Name="RowIndex" Type="int" Nullable="false" />
+    <Property Name="TaskExtent" Type="nvarchar" MaxLength="1000" />
+    <Property Name="TaskFrequency" Type="float" />
+    <Property Name="TaskInterval" Type="nvarchar" MaxLength="50" />
+    <Property Name="TaskName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TaskReference" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MitigationType" Type="nvarchar(max)" />
+    <Property Name="SourceType" Type="int" Nullable="false" />
+    <Property Name="DueDate" Type="datetime2" Precision="7" />
+    <Property Name="LastInspectionId" Type="uniqueidentifier" />
+    <Property Name="IsStaticDueDate" Type="bit" Nullable="false" />
+    <Property Name="FrequencySource" Type="int" Nullable="false" />
+    <Property Name="MitigationSource" Type="nvarchar(max)" />
+    <Property Name="OverrideFrequency" Type="bit" Nullable="false" />
+    <Property Name="LastInspectionDateOverriden" Type="bit" Nullable="false" />
+    <Property Name="ErpMaintenancePlanNumber" Type="nvarchar(max)" />
+    <Property Name="ErpNotificationNumber" Type="nvarchar(max)" />
+    <Property Name="ErpNotificationSystemStatus" Type="nvarchar(max)" />
+    <Property Name="ErpWorkOrderNumber" Type="nvarchar(max)" />
+    <Property Name="ErpWorkOrderSystemStatus" Type="nvarchar(max)" />
+    <Property Name="SendToErp" Type="bit" Nullable="false" />
+    <Property Name="ErpNotificationUserStatus" Type="nvarchar(max)" />
+    <Property Name="ErpReportedBy" Type="nvarchar(max)" />
+    <Property Name="ErpWorkOrderUserStatus" Type="nvarchar(max)" />
+    <Property Name="HistoricInspectionDate" Type="datetime2" Precision="7" />
+    <Property Name="MasterInspectionMethodId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="LastInspectionDateSource" Type="int" Nullable="false" />
+    <Property Name="ManualLastInspectionDate" Type="datetime2" Precision="7" />
+  </EntityType>
+  <EntityType Name="MitigationColumns">
+    <Key>
+      <PropertyRef Name="MitigationColumnId" />
+    </Key>
+    <Property Name="MitigationColumnId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ColumnIndex" Type="int" Nullable="false" />
+    <Property Name="HeaderText" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="IsDisplayed" Type="bit" Nullable="false" />
+    <Property Name="MitigationsId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FilterTagMitigationFilterTagId" Type="uniqueidentifier" />
+  </EntityType>
   <EntityType Name="ModelNodeMetadata">
     <Key>
       <PropertyRef Name="ModelNodeId" />
@@ -157,6 +229,26 @@
     <Property Name="SysEndTime" Type="datetime2" Precision="7" Nullable="false" />
     <Property Name="AuditEventItemId" Type="uniqueidentifier" />
   </EntityType>
+  <EntityType Name="Recommendations">
+    <Key>
+      <PropertyRef Name="RecommendationId" />
+    </Key>
+    <Property Name="RecommendationId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="RowIndex" Type="int" Nullable="false" />
+    <Property Name="TaskExtent" Type="nvarchar" MaxLength="1000" Nullable="false" />
+    <Property Name="TaskFrequency" Type="real" Nullable="false" />
+    <Property Name="TaskInterval" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TaskName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TaskReference" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="MitigationType" Type="nvarchar(max)" />
+    <Property Name="DisplayedMitigationColumns" Type="nvarchar(max)" />
+    <Property Name="MitigationSource" Type="nvarchar(max)" />
+    <Property Name="OverrideFrequency" Type="bit" Nullable="false" />
+    <Property Name="LastInspectionDateOverriden" Type="bit" Nullable="false" />
+    <Property Name="MitigationRowId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="MasterInspectionMethodId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
   <EntityType Name="RiskMatrixConsequenceVectors">
     <Key>
       <PropertyRef Name="RiskMatrixConsequenceVectorId" />
@@ -232,6 +324,62 @@
       </Principal>
       <Dependent Role="ComponentDetails">
         <PropertyRef Name="HierarchyTemplateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InspectionPlans_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="InspectionPlans" Type="Self.InspectionPlans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Principal>
+      <Dependent Role="InspectionPlans">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InspectionPlanTaskMitigationColumns_InspectionPlanTasks_InspectionPlanTaskId">
+    <End Role="InspectionPlanTasks" Type="Self.InspectionPlanTasks" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="InspectionPlanTaskMitigationColumns" Type="Self.InspectionPlanTaskMitigationColumns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InspectionPlanTasks">
+        <PropertyRef Name="InspectionPlanTaskId" />
+      </Principal>
+      <Dependent Role="InspectionPlanTaskMitigationColumns">
+        <PropertyRef Name="InspectionPlanTaskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InspectionPlanTaskMitigationColumns_MitigationColumns_MitigationColumnId">
+    <End Role="MitigationColumns" Type="Self.MitigationColumns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="InspectionPlanTaskMitigationColumns" Type="Self.InspectionPlanTaskMitigationColumns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MitigationColumns">
+        <PropertyRef Name="MitigationColumnId" />
+      </Principal>
+      <Dependent Role="InspectionPlanTaskMitigationColumns">
+        <PropertyRef Name="MitigationColumnId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InspectionPlanTasks_InspectionPlans_InspectionPlanId">
+    <End Role="InspectionPlans" Type="Self.InspectionPlans" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="InspectionPlanTasks" Type="Self.InspectionPlanTasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InspectionPlans">
+        <PropertyRef Name="InspectionPlanId" />
+      </Principal>
+      <Dependent Role="InspectionPlanTasks">
+        <PropertyRef Name="InspectionPlanId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -359,10 +507,28 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Recommendations_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+    <End Role="OrgTreeNodeModelRuns" Type="Self.OrgTreeNodeModelRuns" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Recommendations" Type="Self.Recommendations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgTreeNodeModelRuns">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Principal>
+      <Dependent Role="Recommendations">
+        <PropertyRef Name="OrgTreeNodeModelRunId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="ModelStoreContainer">
     <EntitySet Name="ComponentDetails" EntityType="Self.ComponentDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DimModelRunOverallRisk" EntityType="Self.DimModelRunOverallRisk" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="HierarchyTemplates" EntityType="Self.HierarchyTemplates" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InspectionPlans" EntityType="Self.InspectionPlans" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InspectionPlanTaskMitigationColumns" EntityType="Self.InspectionPlanTaskMitigationColumns" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InspectionPlanTasks" EntityType="Self.InspectionPlanTasks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MitigationColumns" EntityType="Self.MitigationColumns" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ModelNodeMetadata" EntityType="Self.ModelNodeMetadata" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeInputMetadata" EntityType="Self.NodeInputMetadata" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NodeOutputMetadata" EntityType="Self.NodeOutputMetadata" Schema="dbo" store:Type="Tables" />
@@ -370,6 +536,7 @@
     <EntitySet Name="OrgTreeNodeModelRunOutputs" EntityType="Self.OrgTreeNodeModelRunOutputs" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgTreeNodeModelRuns" EntityType="Self.OrgTreeNodeModelRuns" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgTreeNodes" EntityType="Self.OrgTreeNodes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Recommendations" EntityType="Self.Recommendations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RiskMatrixConsequenceVectors" EntityType="Self.RiskMatrixConsequenceVectors" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RiskMatrixProbabilityVectors" EntityType="Self.RiskMatrixProbabilityVectors" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RunnableLookupRowDisplayValues" EntityType="Self.RunnableLookupRowDisplayValues" Schema="dbo" store:Type="Tables" />
@@ -377,6 +544,22 @@
     <AssociationSet Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" Association="Self.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
       <End Role="HierarchyTemplates" EntitySet="HierarchyTemplates" />
       <End Role="ComponentDetails" EntitySet="ComponentDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InspectionPlans_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" Association="Self.FK_InspectionPlans_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+      <End Role="InspectionPlans" EntitySet="InspectionPlans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InspectionPlanTaskMitigationColumns_InspectionPlanTasks_InspectionPlanTaskId" Association="Self.FK_InspectionPlanTaskMitigationColumns_InspectionPlanTasks_InspectionPlanTaskId">
+      <End Role="InspectionPlanTasks" EntitySet="InspectionPlanTasks" />
+      <End Role="InspectionPlanTaskMitigationColumns" EntitySet="InspectionPlanTaskMitigationColumns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InspectionPlanTaskMitigationColumns_MitigationColumns_MitigationColumnId" Association="Self.FK_InspectionPlanTaskMitigationColumns_MitigationColumns_MitigationColumnId">
+      <End Role="MitigationColumns" EntitySet="MitigationColumns" />
+      <End Role="InspectionPlanTaskMitigationColumns" EntitySet="InspectionPlanTaskMitigationColumns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InspectionPlanTasks_InspectionPlans_InspectionPlanId" Association="Self.FK_InspectionPlanTasks_InspectionPlans_InspectionPlanId">
+      <End Role="InspectionPlans" EntitySet="InspectionPlans" />
+      <End Role="InspectionPlanTasks" EntitySet="InspectionPlanTasks" />
     </AssociationSet>
     <AssociationSet Name="FK_ModelNodeMetadata_RunnableModel_ModelId" Association="Self.FK_ModelNodeMetadata_RunnableModel_ModelId">
       <End Role="RunnableModel" EntitySet="RunnableModel" />
@@ -413,6 +596,10 @@
     <AssociationSet Name="FK_OrgTreeNodes_OrgTreeNodes_ParentId" Association="Self.FK_OrgTreeNodes_OrgTreeNodes_ParentId">
       <End Role="OrgTreeNodes" EntitySet="OrgTreeNodes" />
       <End Role="OrgTreeNodes1" EntitySet="OrgTreeNodes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Recommendations_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId" Association="Self.FK_Recommendations_OrgTreeNodeModelRuns_OrgTreeNodeModelRunId">
+      <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
+      <End Role="Recommendations" EntitySet="Recommendations" />
     </AssociationSet>
   </EntityContainer>
 </Schema>
