@@ -11,7 +11,8 @@ namespace T0NKME06.Models
     {
          
 
-        
+        public string ModelId { get; set; }
+
 
 
 

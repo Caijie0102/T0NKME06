@@ -333,5 +333,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="vwDimModelRunOverallRisk">
+      <EntityTypeMapping TypeName="Model.vwDimModelRunOverallRisk">
+        <MappingFragment StoreEntitySet="vwDimModelRunOverallRisk">
+          <ScalarProperty Name="OverallRisk" ColumnName="OverallRisk" />
+          <ScalarProperty Name="OrgTreeNodeModelRunId" ColumnName="OrgTreeNodeModelRunId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vwRunnableLookupRowDisplayValues">
+      <EntityTypeMapping TypeName="Model.vwRunnableLookupRowDisplayValues">
+        <MappingFragment StoreEntitySet="vwRunnableLookupRowDisplayValues">
+          <ScalarProperty Name="LookupRowIdString" ColumnName="LookupRowIdString" />
+          <ScalarProperty Name="DisplayValue" ColumnName="DisplayValue" />
+          <ScalarProperty Name="LookupRowId" ColumnName="LookupRowId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

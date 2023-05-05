@@ -407,6 +407,8 @@
       <End Role="OrgTreeNodeModelRuns" EntitySet="OrgTreeNodeModelRuns" />
       <End Role="Recommendations" EntitySet="Recommendations" />
     </AssociationSet>
+    <EntitySet Name="vwDimModelRunOverallRisk" EntityType="Model.vwDimModelRunOverallRisk" />
+    <EntitySet Name="vwRunnableLookupRowDisplayValues" EntityType="Model.vwRunnableLookupRowDisplayValues" />
   </EntityContainer>
   <EntityType Name="ComponentDetails">
     <Key>
@@ -632,4 +634,19 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="vwDimModelRunOverallRisk">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunId" Type="Guid" Nullable="false" />
+    <Property Name="OverallRisk" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="vwRunnableLookupRowDisplayValues">
+    <Key>
+      <PropertyRef Name="LookupRowId" />
+    </Key>
+    <Property Name="LookupRowId" Type="Guid" Nullable="false" />
+    <Property Name="DisplayValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LookupRowIdString" Type="String" MaxLength="36" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

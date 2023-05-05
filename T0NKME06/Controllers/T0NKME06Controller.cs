@@ -1,31 +1,26 @@
-﻿using Newtonsoft.Json.Linq;
-using NPOI.SS.Formula.PTG;
-using NPOI.XWPF.UserModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.WebPages;
 using T0NKME06.Extensions;
 using T0NKME06.Models;
-using static ICSharpCode.SharpZipLib.Zip.ExtendedUnixData;
+using System.Web.WebPages;
+using System.Threading;
 
 namespace T0NKME06.Controllers
 {
-    public class T0NKME07Controller : ApiController
+    public class T0NKME06Controller : ApiController
     {
-        // GET: T0NKME07
+        // GET: T0NKME06
         public IHttpActionResult Get()
         {
             string start = (DateTime.Now.ToString("HH:mm ss tt"));
 
-            List<T0NKME07model> DataList_T0NKME07model = new List<T0NKME07model>();
+            List<T0NKME06model> DataList_T0NKME06model = new List<T0NKME06model>();
             object lockMe = new object();
 
             HttpResponseMessage responsehttp = new HttpResponseMessage();
@@ -35,7 +30,7 @@ namespace T0NKME06.Controllers
                 using (Entities2 db = new Entities2())
                 {
                     var getAllComponent = from otmr in db.OrgTreeNodeModelRuns  //32
-                                          join otn in db.OrgTreeNodes on otmr.OrgTreeNodeId equals otn.OrgTreeNodeId //3
+                                          join otn in db.OrgTreeNodes on otmr.OrgTreeNodeId equals otn.OrgTreeNodeId where otn.IsDeleted == false //3
                                           //join rm in db.RunnableModel on otmr.ModelId equals rm.ModelId //37
                                           //join dim in db.vwDimModelRunOverallRisk on otmr.OrgTreeNodeModelRunId equals dim.OrgTreeNodeModelRunId //36
                                           select new
@@ -50,171 +45,554 @@ namespace T0NKME06.Controllers
                                               AnalysisDate = otmr.AnalysisDate,
 
 
-                                              //Component = otn.Component.ToString(),
                                               OrgTreeNodeId03 = otn.OrgTreeNodeId.ToString(),
                                               OrgTreeNodeId32 = otmr.OrgTreeNodeId.ToString(), //otmr與otn連接的
                                               ParentId = otn.ParentId.ToString(),   //otn的
-
+                                          
 
                                           };
-                    // return Ok(getAllComponent.Take(100).ToList());
+                    //return Ok(getAllComponent.Take(100).ToList());
+
 
                     var W0NKME03 = db.OrgTreeNodes.ToList();
                     var W0NKME36 = db.vwDimModelRunOverallRisk.ToList();
                     var W0NKME37 = db.RunnableModel.ToList();
 
-                    
-                    var W0NKME26 = db.RunnableLookupRowDisplayValues.ToList();  //0筆
-                    var W0NKME27 = db.RiskMatrixProbabilityVectors.ToList();
-                    var W0NKME28 = db.RiskMatrixConsequenceVectors.ToList();
-
-
                     var fake = getAllComponent
                   //.AsEnumerable() //19
-                  .Take(100);
+                  .Take(50);
                     //.ToList(); // 将 LINQ 对象转换为列表对象
 
-
-                    //parallel可同時處理多筆資料
                     Parallel.ForEach(fake, item =>
-                    {    //var OverallRisk = W0NKME36.Where(x => x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).Select(x => new { x.OverallRisk }).ToList();
-                         //在這個迴圈中，程式碼使用Where方法從"W0NKME03"集合中過濾出元件（Components），以便獲取該元件的詳細資料，例如組織、位置、系統、設備、元件ID等。使用Select方法從過濾後的元件集合中，選擇需要的屬性來建立一個匿名物件，然後使用FirstOrDefault方法來取得第一個符合條件的元素，如果沒有符合條件的元素，則返回null。
 
+                    {    //var OverallRisk = W0NKME36.Where(x => x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).Select(x => new { x.OverallRisk }).ToList();
+                        //在這個迴圈中，程式碼使用Where方法從"W0NKME03"集合中過濾出元件（Components），以便獲取該元件的詳細資料，例如組織、位置、系統、設備、元件ID等。使用Select方法從過濾後的元件集合中，選擇需要的屬性來建立一個匿名物件，然後使用FirstOrDefault方法來取得第一個符合條件的元素，如果沒有符合條件的元素，則返回null。
+                        
                         string ModelNameString = ""; //37
-                        var ModelName = W0NKME37.Where(x => x.ModelId.ToString() == item.ModelId.ToString()).FirstOrDefault();
+                        var ModelName = W0NKME37.Where(x =>  x.ModelId.ToString() == item.ModelId.ToString()).FirstOrDefault();
                         if (ModelName != null)
                         {
                             ModelNameString = ModelName.ModelName;
                             //ModelNameString = ModelName.Select(x => x.ModelName).FirstOrDefault();
                         }
-                        else
+                        else 
                         {
                             ModelNameString = "";
                         }
 
                         string OverallRiskString = ""; //36
-                        var OverallRisk = W0NKME36.Where(x => x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();
-                        // var OverallRisk = db.vwDimModelRunOverallRisk.Where(x =>  x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).Select(x => new { x.OverallRisk }).ToList();
+                        var OverallRisk = W0NKME36.Where(x =>  x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();
+                       // var OverallRisk = db.vwDimModelRunOverallRisk.Where(x =>  x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).Select(x => new { x.OverallRisk }).ToList();
                         if (OverallRisk != null)
                         {
                             OverallRiskString = OverallRisk.OverallRisk;
-                            //   OverallRisk.Select(x => x.OverallRisk).FirstOrDefault();
+                         //   OverallRisk.Select(x => x.OverallRisk).FirstOrDefault();
                         }
                         else
                         {
                             OverallRiskString = "";
                         }
-                        var getComponent = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId32.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
-                        if (getComponent != null)
-                        {
-                            var getAssetitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
-                        if (getAssetitem != null)
-                        {
-                            var getSystemitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getAssetitem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
-                            if (getSystemitem != null)
-                            {
-                                var getUnititem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getSystemitem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
-                                if (getUnititem != null)
-                                {
-                                    var getSititem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getUnititem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
-                                    if (getSititem != null)
-                                    {
-                                        var getOrganisationitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getSititem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
-                                        if (getOrganisationitem != null)
-                                        {
-                                            lock (lockMe)
-                                            {
 
-                                                DataList_T0NKME07model.Add(new T0NKME07model()
+                            var getAssetitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId32.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
+                            if (getAssetitem != null)
+                            {
+                                var getSystemitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getAssetitem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
+                                if (getSystemitem != null)
+                                {
+                                    var getUnititem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getSystemitem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
+                                    if (getUnititem != null)
+                                    {
+                                        var getSititem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getUnititem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
+                                        if (getSititem != null)
+                                        {
+                                            var getOrganisationitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getSititem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
+                                            if (getOrganisationitem != null)
+                                            {
+                                                lock (lockMe)
                                                 {
 
-                                                    OrganisationId = getOrganisationitem.OrgTreeNodeId.ToString(),
-                                                    Organisation = getOrganisationitem.Name,
-                                                    SitId = getSititem.OrgTreeNodeId.ToString(),
-                                                    Sit = getSititem.Name,
-                                                    UnitId = getUnititem.OrgTreeNodeId.ToString(),
-                                                    Unit = getUnititem.Name,
-                                                    SystemId = getSystemitem.OrgTreeNodeId.ToString(),
-                                                    System = getSystemitem.Name,
-                                                    AssetId = getAssetitem.OrgTreeNodeId.ToString(),
-                                                    Asset = getAssetitem.Name,
-                                                    ComponentId = getComponent.OrgTreeNodeId.ToString(),
-                                                    Component = getComponent.Name,
+                                                    DataList_T0NKME06model.Add(new T0NKME06model()
+                                                    {
+
+                                                        OrganisationId = getOrganisationitem.OrgTreeNodeId.ToString(),
+                                                        Organisation = getOrganisationitem.Name,
+                                                        SitId = getSititem.OrgTreeNodeId.ToString(),
+                                                        Sit = getSititem.Name,
+                                                        UnitId = getUnititem.OrgTreeNodeId.ToString(),
+                                                        Unit = getUnititem.Name,
+                                                        SystemId = getSystemitem.OrgTreeNodeId.ToString(),
+                                                        System = getSystemitem.Name,
+                                                        AssetId = getAssetitem.OrgTreeNodeId.ToString(),
+                                                        Asset = getAssetitem.Name,
+
+                                                        
+                                                       
+                                                        OrgTreeNodeModelRunId = item.OrgTreeNodeModelRunId.ToString(),
+                                                        CreationDate = item.CreationDate.ToString(),
+                                                        CreatedBy = item.CreatedBy,
+                                                        LastModifiedDate = item.LastModifiedDate.ToString(),
+                                                        Name = item.Name,
+                                                        ScenarioType = item.ScenarioType.ToString(),
+                                                        AnalysisDate = item.AnalysisDate.ToString(),
+                                                        
+                                                        OverallRisk = OverallRiskString,
+                                                        ModelName = ModelNameString,
+
+
+                                                        ModelId = item.ModelId.ToString(),
 
 
 
-                                                    OrgTreeNodeModelRunId = item.OrgTreeNodeModelRunId.ToString(),
-                                                    CreationDate = item.CreationDate.ToString(),
-                                                    CreatedBy = item.CreatedBy,
-                                                    LastModifiedDate = item.LastModifiedDate.ToString(),
-                                                    Name = item.Name,
-                                                    ScenarioType = item.ScenarioType.ToString(),
-                                                    AnalysisDate = item.AnalysisDate.ToString(),
 
-                                                    OverallRisk = OverallRiskString,
-                                                    ModelName = ModelNameString,
-
-
-                                                    //ModelId = item.ModelId.ToString(),
-
-
-
-
-                                                });
+                                                    });
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                    }
-
+                        
 
 
 
 
 
                     });
+                    //33 
+                    //return Ok(DataList_T0NKME06model);
 
-                    //return Ok(DataList_T0NKME07model);
-
+                    string m1 = (DateTime.Now.ToString("HH:mm ss tt"));
+                    
                     var W0NKME31 = db.NodeInputMetadata.ToList();
+                    var W0NKME29 = db.ModelNodeMetadata.ToList();
+                    
                     var W0NKME30 = db.NodeOutputMetadata.ToList();
+                   
+                    var W0NKME26 = db.vwRunnableLookupRowDisplayValues.ToList();
+                    var W0NKME27 = db.RiskMatrixProbabilityVectors.ToList();
+                    var W0NKME28 = db.RiskMatrixConsequenceVectors.ToList();
+
+                    
+
+                    string m2 = (DateTime.Now.ToString("HH:mm ss tt"));
 
 
-                    //Double DikeArea;
 
-                    foreach (var need24 in DataList_T0NKME07model)
+
+                    //32-24/24-31/24-29
+
+                    Parallel.ForEach(DataList_T0NKME06model, need24 => //foreach (var need24 in DataList_T0NKME06model)
                     {
-                        string BundleExtCorrRate=" ", BundleIntCorrRate=" ", DetectionTime=" ", DikedFlag=" ", IsolationTime=" ",   RepFluid="", ProductionLoss="", PercentToxic=" ", ToxicFluid=" ", ToxicMixtureFlag="", EnvCrckgInspConf="", EnvCrckgLastInspDate="", EnvCrckgNoOfInsp="", EnvCrckgServDate="", EnvCrckgMech="", Humidity="", ExtWettingFlag="", ExtCorrosionOption="",
-                             ExtServDate="",  CUIFlag="", ExtInspConf="",ExtLastInspDate="", ExtNoOfInsp="", ExtCoating="", InsulatedFlag="", InsulationCondition="", InsulationType="",
-                             FluidType="",   IntCorrosionType="",   CompType="",   IntServDate="",
-                            IntInpsConf="", IntLastInspDate="", IntNoOfInps="", ConstCode="", JointEfficiency="",  OverideAllowableStressFlag="", AnalysisDate="", IntCorrosionOption = "" ,
-                            EstMinThicknessFlag ="",   
+                        string JacketedFlag = " ", IntEntryPossFlag = " ", InjectionPointFlag = " ", MixedBoreFlag = " ", SmallBoreFlag = " ", NoBarrPenetrations = " ", NoDmgdInsd = " ", NoDeadLegs = " ", NoElbows = " ", NoErosionZones = " ", NoHorizLowPts = " ", NoInsdTerminators = " ", NoLongHorizRuns = " ", NoReducers = " ", NoSoilToAirIntfs = " ", NoTees = " ", NoVertRuns = " ",
+                    DetectionTime = " ", IsolationTime = " ", DikedFlag = " ", RepFluid = " ", ProductionLoss = " ", PercentToxic = " ", ToxicFluid = " ", ToxicMixtureFlag = " ",
+                    EnvCrckgInspConf = " ", EnvCrckgLastInspDate = " ", EnvCrckgNoOfInsp = " ", EnvCrckgServDate = " ", EnvCrckgMech = " ",
+                    Humidity = " ", ExtWettingFlag = " ", ExtCorrosionOption = " ", ExtServDate = " ", CUIFlag = " ", ExtInspConf = " ", ExtLastInspDate = " ", ExtNoOfInsp = " ", ExtCoating = " ", InsdFlag = " ", InsdCond = " ", InsdType = " ",
+                     FluidType = " ",
+                    IntCorrosionType = " ", IntCorrosionOption = " ", CompType = " ", IntServDate = " ", ODOverrideFlag = " ", AnalysisDate = " ", IntInpsConf = " ", IntLastInspDate = " ", IntNoOfInps = " ", ConstCode = " ", JointEfficiency = " ", OverideAllowableStressFlag = " ", EstMinThicknessFlag = " ",
                     ODM1 = " ", ODM2 = " ", ODM3 = " ", ODM4 = " ", ODM5 = " ", ODM1Potential = " ", ODM2Potential = " ", ODM3Potential = " ", ODM4Potential = " ", ODM5Potential = " ", ODM1Probability = " ", ODM2Probability = " ", ODM3Probability = " ", ODM4Probability = " ", ODM5Probability = " ", ODM1Comment = " ", ODM2Comment = " ", ODM3Comment = " ", ODM4Comment = " ", ODM5Comment = " ", EstHalfLife = " ";
 
-
-                        double DikeArea = 0, Inventory = 0, OperatingPressure=0, ExtExpecedCorrRate=0, ExtMeasuredCorrRate = 0, ExtCalcCorrRate = 0, OverideAllowableStress = 0
-                            ,OperatingTemp = 0, AIT = 0, BoilingPoint = 0, ToxicBP = 0,  IntExpectedCorrRate = 0, IntLTCorrRate = 0, IntSTCorrRate =0, DesignPressure = 0,
-                            DesignTemp = 0, Diameter = 0, EstMinThickness = 0, RepThick = 0, IntEstWallRemain = 0, EstMinThickness2 = 0;
-                        
-                        
-                        //31
-                        var get31 = W0NKME31.Where(x => x.NodeInputId.ToString() == need24.NodeInputId.ToString()).Select(x => new { x.GroupName, x.Label, need24.Value, x.NodeInputId }).ToList();
-                        var get30 = W0NKME30.Where(x => x.NodeOutputId.ToString() == need24.NodeOutputId.ToString()).Select(x => new { x.GroupName, x.Label }).ToList();
-
-                        var DisplayValue = W0NKME26.Where(x => x.LookupRowId.ToString() == need24.Value.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
-                        var ProbabilityLabel = W0NKME27.Where(x => x.Index.ToString() == need24.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
-                        var ConsequenceLabel = W0NKME28.Where(x => x.Index.ToString() == need24.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                        double DikeArea = 0, Inventory = 0, OpernTemp = 0, OpernPress = 0, RepThick = 0, ExtExpecedCorrRate = 0, ExtMeasuredCorrRate = 0, IntExpectedCorrRate = 0, IntLTCorrRate = 0, IntSTCorrRate = 0, DesignPressure = 0, DesignTemp = 0, Diameter = 0, ODOverride = 0, OverideAllowableStress = 0, ExtCalcCorrRate = 0, EstMinThickness = 0, IntEstWallRemain = 0, OperatingTemperature = 0,
+                            AIT = 0, BoilingPoint = 0, ToxicBP = 0;
 
 
-                        var DisplayValue25 = W0NKME26.Where(x => x.LookupRowId.ToString() == need24.Value25.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
-                        var ProbabilityLabel25 = W0NKME27.Where(x => !need24.Value25.IsEmpty() && x.Index.ToString() == need24.Value25.ToString()).Select(x => new { x.Label }).FirstOrDefault();
-                        var ConsequenceLabel25 = W0NKME28.Where(x => !need24.Value25.IsEmpty() && x.Index.ToString() == need24.Value25.ToString()).Select(x => new { x.Label }).FirstOrDefault();
-                        //!x.GroupName.IsEmpty() &&
-                        switch (db.ModelNodeMetadata.Where(x => x.ModelNodeId.ToString() == need24.ModelNodeId.ToString()).FirstOrDefault().NodeLabel) //24==29
+                        if (need24.OrgTreeNodeModelRunId != null)
                         {
-                            
+                            var get24 = db.OrgTreeNodeModelRunInputs.Where(x => x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();//32-24
+
+                            var get25 = db.OrgTreeNodeModelRunOutputs.Where(x => x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();//32-25
+
+                        
+
+
+                        //31
+
+                        var get31 = W0NKME31.Where(x => x.NodeInputId.ToString() == get24.NodeInputId.ToString()).Select(x => new { x.GroupName, x.Label, get24.Value, x.NodeInputId }).ToList(); //24-31
+                        var get30 = W0NKME30.Where(x => x.NodeOutputId.ToString() == get25.NodeOutputId.ToString()).Select(x => new { x.GroupName, x.Label, get25.Value, x.NodeOutputId }).ToList(); //25-30
+
+
+                        //29
+                        //var get2429 = W0NKME29.Where(x => x.ModelNodeId.ToString() == get24.ModelNodeId.ToString()).Select(x => new {  x.NodeLabel }).ToList(); //24-29
+                        //var get2529 = W0NKME29.Where(x => x.ModelNodeId.ToString() == get25.ModelNodeId.ToString()).Select(x => new {  x.NodeLabel }).ToList(); //25-29
+
+                        //24-26/27/28
+                        var DisplayValue = W0NKME26.Where(x => !need24.Value.IsEmpty() && x.LookupRowId.ToString() == get24.Value.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
+                        var ProbabilityLabel = W0NKME27.Where(x => !need24.Value.IsEmpty() && x.Index.ToString() == get24.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                        var ConsequenceLabel = W0NKME28.Where(x => !need24.Value.IsEmpty() && x.Index.ToString() == get24.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                        //
+                        //
+                        var DisplayValue25 = W0NKME26.Where(x => !need24.Value25.IsEmpty() && x.LookupRowId.ToString() == get25.Value.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
+                        var ProbabilityLabel25 = W0NKME27.Where(x => !need24.Value25.IsEmpty() && x.Index.ToString() == get25.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                        var ConsequenceLabel25 = W0NKME28.Where(x => !need24.Value25.IsEmpty() && x.Index.ToString() == get25.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+
+
+
+                        switch (W0NKME29.Where(x => x.ModelNodeId.ToString() == get24.ModelNodeId.ToString()).FirstOrDefault().NodeLabel) //24==29
+                        {
+                            case "ADDITIONAL INFORMATION":
+                                var getJacketedFlag = get31.Where(x => x.GroupName.ToString() == "Other Data" && x.Label.ToString().Contains("Jacket")).FirstOrDefault();
+                                if (getJacketedFlag != null && DisplayValue != null)
+                                {
+                                    JacketedFlag = DisplayValue.DisplayValue;
+                                }
+                                else if (getJacketedFlag != null && ProbabilityLabel != null)
+                                {
+                                    JacketedFlag = ProbabilityLabel.Label;
+                                }
+                                else if (getJacketedFlag != null && ConsequenceLabel != null)
+                                {
+                                    JacketedFlag = ConsequenceLabel.Label;
+                                }
+                                else if (getJacketedFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                {
+                                    JacketedFlag = need24.Value;
+                                }
+                                else
+                                {
+                                    var getIntEntryPossFlag = get31.Where(x => x.GroupName.ToString() == "Column Locations"
+                                || x.GroupName.ToString() == "Exchanger Locations" || x.GroupName.ToString() == "Pipe Locations"
+                                                                     || x.GroupName.ToString() == "Tank Locations" || x.GroupName.ToString() == "Vessel Locations"
+                                                                     && x.Label.ToString() == "Internal Entry Possible").FirstOrDefault();//其實應該要24
+                                    if (getIntEntryPossFlag != null && DisplayValue != null)
+                                    {
+                                        IntEntryPossFlag = DisplayValue.DisplayValue;
+                                    }
+                                    else if (getIntEntryPossFlag != null && ProbabilityLabel != null)
+                                    {
+                                        IntEntryPossFlag = ProbabilityLabel.Label;
+                                    }
+                                    else if (getIntEntryPossFlag != null && ConsequenceLabel != null)
+                                    {
+                                        IntEntryPossFlag = ConsequenceLabel.Label;
+                                    }
+                                    else if (getIntEntryPossFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                    {
+                                        IntEntryPossFlag = need24.Value;
+                                    }
+                                    else
+                                    {
+
+                                        //
+                                        var getInjectionPointFlag = get31.Where(x => x.GroupName.ToString() == "Other Data" && x.Label.ToString() == "Injection Point?").FirstOrDefault();//其實應該要24
+                                        if (getInjectionPointFlag != null && DisplayValue != null)
+                                        {
+                                            InjectionPointFlag = DisplayValue.DisplayValue;
+                                        }
+                                        else if (getInjectionPointFlag != null && ProbabilityLabel != null)
+                                        {
+                                            InjectionPointFlag = ProbabilityLabel.Label;
+                                        }
+                                        else if (getInjectionPointFlag != null && ConsequenceLabel != null)
+                                        {
+                                            InjectionPointFlag = ConsequenceLabel.Label;
+                                        }
+                                        else if (getInjectionPointFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                        {
+                                            InjectionPointFlag = need24.Value;
+                                        }
+                                        else
+                                        {
+                                            var getMixedBoreFlag = get31.Where(x => x.GroupName.ToString() == "Other Data" && x.Label.ToString() == "Mixed Bore?").FirstOrDefault();//其實應該要24
+                                            if (getMixedBoreFlag != null && DisplayValue != null)
+                                            {
+                                                MixedBoreFlag = DisplayValue.DisplayValue;
+                                            }
+                                            else if (getMixedBoreFlag != null && ProbabilityLabel != null)
+                                            {
+                                                MixedBoreFlag = ProbabilityLabel.Label;
+                                            }
+                                            else if (getMixedBoreFlag != null && ConsequenceLabel != null)
+                                            {
+                                                MixedBoreFlag = ConsequenceLabel.Label;
+                                            }
+                                            else if (getMixedBoreFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                            {
+                                                MixedBoreFlag = need24.Value;
+                                            }
+                                            else
+                                            {
+                                                var getSmallBoreFlag = get31.Where(x => x.GroupName.ToString() == "Other Data"
+                                                                                 && x.Label.ToString() == "Small Bore?").FirstOrDefault();
+                                                if (getSmallBoreFlag != null && DisplayValue != null)
+                                                {
+                                                    SmallBoreFlag = DisplayValue.DisplayValue;
+                                                }
+                                                else if (getSmallBoreFlag != null && ProbabilityLabel != null)
+                                                {
+                                                    SmallBoreFlag = ProbabilityLabel.Label;
+                                                }
+                                                else if (getSmallBoreFlag != null && ConsequenceLabel != null)
+                                                {
+                                                    SmallBoreFlag = ConsequenceLabel.Label;
+                                                }
+                                                else if (getSmallBoreFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                {
+                                                    SmallBoreFlag = need24.Value;
+                                                }
+                                                else
+                                                {
+                                                    var getNoBarrPenetrations = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                 && x.Label.ToString() == "Number of Barrier Penetrations").FirstOrDefault();//其實應該要24
+                                                    if (getNoBarrPenetrations != null && DisplayValue != null)
+                                                    {
+                                                        NoBarrPenetrations = DisplayValue.DisplayValue;
+                                                    }
+                                                    else if (getNoBarrPenetrations != null && ProbabilityLabel != null)
+                                                    {
+                                                        NoBarrPenetrations = ProbabilityLabel.Label;
+                                                    }
+                                                    else if (getNoBarrPenetrations != null && ConsequenceLabel != null)
+                                                    {
+                                                        NoBarrPenetrations = ConsequenceLabel.Label;
+                                                    }
+                                                    else if (getNoBarrPenetrations != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                    {
+                                                        NoBarrPenetrations = need24.Value;
+                                                    }
+                                                    else
+                                                    {
+                                                        var getNoDmgdInsd = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                 && x.Label.ToString() == "Number of Damaged Insulation").FirstOrDefault();//其實應該要24
+                                                        if (getNoDmgdInsd != null && DisplayValue != null)
+                                                        {
+                                                            NoDmgdInsd = DisplayValue.DisplayValue;
+                                                        }
+                                                        else if (getNoDmgdInsd != null && ProbabilityLabel != null)
+                                                        {
+                                                            NoDmgdInsd = ProbabilityLabel.Label;
+                                                        }
+                                                        else if (getNoDmgdInsd != null && ConsequenceLabel != null)
+                                                        {
+                                                            NoDmgdInsd = ConsequenceLabel.Label;
+                                                        }
+                                                        else if (getNoDmgdInsd != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                        {
+                                                            NoDmgdInsd = need24.Value;
+                                                        }
+                                                        else
+                                                        {
+                                                            var getNoDeadLegs = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                 && x.Label.ToString() == "Number of Dead Legs").FirstOrDefault();//其實應該要24
+                                                            if (getNoDeadLegs != null && DisplayValue != null)
+                                                            {
+                                                                NoDeadLegs = DisplayValue.DisplayValue;
+                                                            }
+                                                            else if (getNoDeadLegs != null && ProbabilityLabel != null)
+                                                            {
+                                                                NoDeadLegs = ProbabilityLabel.Label;
+                                                            }
+                                                            else if (getNoDeadLegs != null && ConsequenceLabel != null)
+                                                            {
+                                                                NoDeadLegs = ConsequenceLabel.Label;
+                                                            }
+                                                            else if (getNoDeadLegs != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                            {
+                                                                NoDeadLegs = need24.Value;
+                                                            }
+                                                            else
+                                                            {
+                                                                var getNoElbows = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                 && x.Label.ToString() == "Number of Elbows").FirstOrDefault();//其實應該要24
+                                                                if (getNoElbows != null && DisplayValue != null)
+                                                                {
+                                                                    NoElbows = DisplayValue.DisplayValue;
+                                                                }
+                                                                else if (getNoElbows != null && ProbabilityLabel != null)
+                                                                {
+                                                                    NoElbows = ProbabilityLabel.Label;
+                                                                }
+                                                                else if (getNoElbows != null && ConsequenceLabel != null)
+                                                                {
+                                                                    NoElbows = ConsequenceLabel.Label;
+                                                                }
+                                                                else if (getNoElbows != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                {
+                                                                    NoElbows = need24.Value;
+                                                                }
+                                                                else
+                                                                {
+                                                                    var getNoErosionZones = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Erosion Zones").FirstOrDefault();//其實應該要24
+                                                                    if (getNoErosionZones != null && DisplayValue != null)
+                                                                    {
+                                                                        NoErosionZones = DisplayValue.DisplayValue;
+                                                                    }
+                                                                    else if (getNoErosionZones != null && ProbabilityLabel != null)
+                                                                    {
+                                                                        NoErosionZones = ProbabilityLabel.Label;
+                                                                    }
+                                                                    else if (getNoErosionZones != null && ConsequenceLabel != null)
+                                                                    {
+                                                                        NoErosionZones = ConsequenceLabel.Label;
+                                                                    }
+                                                                    else if (getNoErosionZones != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                    {
+                                                                        NoErosionZones = need24.Value;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        var getNoHorizLowPts = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Horizontal Low Points").FirstOrDefault();//其實應該要24
+                                                                        if (getNoHorizLowPts != null && DisplayValue != null)
+                                                                        {
+                                                                            NoHorizLowPts = DisplayValue.DisplayValue;
+                                                                        }
+                                                                        else if (getNoHorizLowPts != null && ProbabilityLabel != null)
+                                                                        {
+                                                                            NoHorizLowPts = ProbabilityLabel.Label;
+                                                                        }
+                                                                        else if (getNoHorizLowPts != null && ConsequenceLabel != null)
+                                                                        {
+                                                                            NoHorizLowPts = ConsequenceLabel.Label;
+                                                                        }
+                                                                        else if (getNoHorizLowPts != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                        {
+                                                                            NoHorizLowPts = need24.Value;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            var getNoInsdTerminators = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Insulation Terminations").FirstOrDefault();//其實應該要24
+                                                                            if (getNoInsdTerminators != null && DisplayValue != null)
+                                                                            {
+                                                                                NoInsdTerminators = DisplayValue.DisplayValue;
+                                                                            }
+                                                                            else if (getNoInsdTerminators != null && ProbabilityLabel != null)
+                                                                            {
+                                                                                NoInsdTerminators = ProbabilityLabel.Label;
+                                                                            }
+                                                                            else if (getNoInsdTerminators != null && ConsequenceLabel != null)
+                                                                            {
+                                                                                NoInsdTerminators = ConsequenceLabel.Label;
+                                                                            }
+                                                                            else if (getNoInsdTerminators != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                            {
+                                                                                NoInsdTerminators = need24.Value;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var getNoLongHorizRuns = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Long Horizontal Runs").FirstOrDefault();//其實應該要24
+                                                                                if (getNoLongHorizRuns != null && DisplayValue != null)
+                                                                                {
+                                                                                    NoLongHorizRuns = DisplayValue.DisplayValue;
+                                                                                }
+                                                                                else if (getNoLongHorizRuns != null && ProbabilityLabel != null)
+                                                                                {
+                                                                                    NoLongHorizRuns = ProbabilityLabel.Label;
+                                                                                }
+                                                                                else if (getNoLongHorizRuns != null && ConsequenceLabel != null)
+                                                                                {
+                                                                                    NoLongHorizRuns = ConsequenceLabel.Label;
+                                                                                }
+                                                                                else if (getNoLongHorizRuns != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                {
+                                                                                    NoLongHorizRuns = need24.Value;
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    var getNoReducers = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Reducers").FirstOrDefault();//其實應該要24
+                                                                                    if (getNoReducers != null && DisplayValue != null)
+                                                                                    {
+                                                                                        NoReducers = DisplayValue.DisplayValue;
+                                                                                    }
+                                                                                    else if (getNoReducers != null && ProbabilityLabel != null)
+                                                                                    {
+                                                                                        NoReducers = ProbabilityLabel.Label;
+                                                                                    }
+                                                                                    else if (getNoReducers != null && ConsequenceLabel != null)
+                                                                                    {
+                                                                                        NoReducers = ConsequenceLabel.Label;
+                                                                                    }
+                                                                                    else if (getNoReducers != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                    {
+                                                                                        NoReducers = need24.Value;
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        var getNoSoilToAirIntfs = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Soil-Air Interface").FirstOrDefault();//其實應該要24
+                                                                                        if (getNoSoilToAirIntfs != null && DisplayValue != null)
+                                                                                        {
+                                                                                            NoSoilToAirIntfs = DisplayValue.DisplayValue;
+                                                                                        }
+                                                                                        else if (getNoSoilToAirIntfs != null && ProbabilityLabel != null)
+                                                                                        {
+                                                                                            NoSoilToAirIntfs = ProbabilityLabel.Label;
+                                                                                        }
+                                                                                        else if (getNoSoilToAirIntfs != null && ConsequenceLabel != null)
+                                                                                        {
+                                                                                            NoSoilToAirIntfs = ConsequenceLabel.Label;
+                                                                                        }
+                                                                                        else if (getNoSoilToAirIntfs != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                        {
+                                                                                            NoSoilToAirIntfs = need24.Value;
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            var getNoTees = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Tees").FirstOrDefault();//其實應該要24
+                                                                                            if (getNoTees != null && need24.DisplayValue != null)
+                                                                                            {
+                                                                                                NoTees = DisplayValue.DisplayValue;
+                                                                                            }
+                                                                                            else if (getNoTees != null && ProbabilityLabel != null)
+                                                                                            {
+                                                                                                NoTees = ProbabilityLabel.Label;
+                                                                                            }
+                                                                                            else if (getNoTees != null && ConsequenceLabel != null)
+                                                                                            {
+                                                                                                NoTees = ConsequenceLabel.Label;
+                                                                                            }
+                                                                                            else if (getNoTees != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                            {
+                                                                                                NoTees = need24.Value;
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                var getNoVertRuns = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
+                                                                                                     && x.Label.ToString() == "Number of Vertical Runs").FirstOrDefault();//其實應該要24
+                                                                                                if (getNoVertRuns != null && DisplayValue != null)
+                                                                                                {
+                                                                                                    NoVertRuns = DisplayValue.DisplayValue;
+                                                                                                }
+                                                                                                else if (getNoVertRuns != null && ProbabilityLabel != null)
+                                                                                                {
+                                                                                                    NoVertRuns = ProbabilityLabel.Label;
+                                                                                                }
+                                                                                                else if (getNoVertRuns != null && ConsequenceLabel != null)
+                                                                                                {
+                                                                                                    NoVertRuns = ConsequenceLabel.Label;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    NoVertRuns = need24.Value;
+                                                                                                }
+
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+
+                                                        }
+                                                    }
+                                                }
+
+
+
+                                            }
+
+
+                                        }
+                                    }
+                                }
+                                break;
 
                             case "CONSEQUENCE":
 
@@ -325,30 +703,55 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else
                                                 {
-                                                    var getOperatingPressure = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Process Data"
+                                                    var getOperatingPressure = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Process Data"
                                                                          && x.Label.ToString() == "Operating Pressure").FirstOrDefault();
                                                     if (getOperatingPressure != null && DisplayValue != null)
                                                     {
-                                                        OperatingPressure = Convert.ToDouble(DisplayValue.DisplayValue) * 0.0689476;
+                                                        OpernPress = Convert.ToDouble(DisplayValue.DisplayValue) * 0.0689476;
                                                     }
                                                     else if (getOperatingPressure != null && ProbabilityLabel != null)
                                                     {
-                                                        OperatingPressure = Convert.ToDouble(ProbabilityLabel.Label) * 0.0689476;
+                                                        OpernPress = Convert.ToDouble(ProbabilityLabel.Label) * 0.0689476;
 
 
                                                     }
                                                     else if (getOperatingPressure != null && ConsequenceLabel != null)
                                                     {
-                                                        OperatingPressure = Convert.ToDouble(ConsequenceLabel.Label) * 0.0689476;
+                                                        OpernPress = Convert.ToDouble(ConsequenceLabel.Label) * 0.0689476;
 
                                                     }
                                                     else if (getOperatingPressure != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        OperatingPressure = Convert.ToDouble(need24.Value) * 0.0689476;
+                                                        OpernPress = Convert.ToDouble(need24.Value) * 0.0689476;
 
                                                     }
-                                                    
-                                                       
+                                                    else
+                                                    {
+                                                        var getOperatingTemp = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Process Data"
+                                                                         && x.Label.ToString() == "Operating Temperature").FirstOrDefault();
+                                                        if (getOperatingTemp != null && DisplayValue != null)
+                                                        {
+                                                            var OperatingTemp1 = Convert.ToDouble(DisplayValue.DisplayValue);
+                                                            OpernTemp = ((OperatingTemp1 - 32) * 5) / 9;
+
+                                                        }
+                                                        else if (getOperatingTemp != null && ProbabilityLabel != null)
+                                                        { //(value - 32)x5/9
+                                                            var OperatingTemp1 = Convert.ToDouble(ProbabilityLabel.Label);
+                                                            OpernTemp = ((OperatingTemp1 - 32) * 5) / 9;
+                                                        }
+                                                        else if (getOperatingTemp != null && ConsequenceLabel != null)
+                                                        {
+                                                            var OperatingTemp1 = Convert.ToDouble(ConsequenceLabel.Label);
+                                                            OpernTemp = ((OperatingTemp1 - 32) * 5) / 9;
+
+                                                        }
+                                                        else if (getOperatingTemp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                        {
+                                                            var OperatingTemp1 = Convert.ToDouble(need24.Value);
+                                                            OpernTemp = ((OperatingTemp1 - 32) * 5) / 9;
+
+                                                        }
                                                         else
                                                         {
                                                             var getRepFluid = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Process Data"
@@ -445,61 +848,18 @@ namespace T0NKME06.Controllers
                                                                             {
                                                                                 ToxicMixtureFlag = ConsequenceLabel.Label;
                                                                             }
-                                                                            else if (getToxicMixtureFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
-                                                                        {
-                                                                            ToxicMixtureFlag = need24.Value;
-                                                                        }
 
-                                                                            else
+                                                                            else if (getToxicMixtureFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                
-                                                                            var getBundleExtCorrRate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion"
-                                                                         && x.Label.ToString() == "Ext. Corrosion Rate").FirstOrDefault();
-                                                                            if (getBundleExtCorrRate != null && DisplayValue != null)
-                                                                            {
-                                                                                BundleExtCorrRate = DisplayValue.DisplayValue;
+                                                                                ToxicMixtureFlag = need24.Value;
                                                                             }
-                                                                            else if (getBundleExtCorrRate != null && ProbabilityLabel != null)
-                                                                            {
-                                                                                BundleExtCorrRate = ProbabilityLabel.Label;
-                                                                            }
-                                                                            else if (getBundleExtCorrRate != null && ConsequenceLabel != null)
-                                                                            {
-                                                                                BundleExtCorrRate = ConsequenceLabel.Label;
-                                                                            }
-                                                                            else if (getBundleExtCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
-                                                                            {
-                                                                                BundleExtCorrRate = need24.Value;
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                var getBundleIntCorrRate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion"
-                                                                                                                                                         && x.Label.ToString() == "Int. Corrosion Rate").FirstOrDefault();
-                                                                                if (getBundleIntCorrRate != null && DisplayValue != null)
-                                                                                {
-                                                                                    BundleIntCorrRate = DisplayValue.DisplayValue;
-                                                                                }
-                                                                                else if (getBundleIntCorrRate != null && ProbabilityLabel != null)
-                                                                                {
-                                                                                    BundleIntCorrRate = ProbabilityLabel.Label;
-                                                                                }
-                                                                                else if (getBundleIntCorrRate != null && ConsequenceLabel != null)
-                                                                                {
-                                                                                    BundleIntCorrRate = ConsequenceLabel.Label;
-                                                                                }
-                                                                                else if (getBundleIntCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
-                                                                                {
-                                                                                    BundleIntCorrRate = need24.Value;
-                                                                                }
-                                                                            }
-                                                                        }
                                                                         }
                                                                     }
                                                                 }
 
                                                             }
                                                         }
-                                                    
+                                                    }
                                                 }
                                             }
                                         }
@@ -549,6 +909,7 @@ namespace T0NKME06.Controllers
                                     else
                                     {
 
+
                                         var getEnvCrckgServDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Potential for Cracking"
                                                                          && x.Label.ToString() == "Environmental Cracking Date in Service").FirstOrDefault();//其實應該要24
                                         if (getEnvCrckgServDate != null && DisplayValue != null)
@@ -570,8 +931,7 @@ namespace T0NKME06.Controllers
                                         else
                                         {
                                             var getEnvCrckgMech = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Potential for Cracking"
-                                                                         && (x.Label.ToString()== "Environmental Cracking Mechanism ~ Initial Potential")
-                                                                         || x.Label.ToString() == "Environmental Cracking Mechanism").FirstOrDefault();//其實應該要24
+                                                                         && x.Label.ToString().Contains("Environmental Cracking Mechanism")).FirstOrDefault();//其實應該要24
                                             if (getEnvCrckgMech != null && DisplayValue != null)
                                             {
                                                 EnvCrckgMech = DisplayValue.DisplayValue;
@@ -584,14 +944,15 @@ namespace T0NKME06.Controllers
                                             {
                                                 EnvCrckgMech = ConsequenceLabel.Label;
                                             }
-                                            else if(getEnvCrckgMech != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                            else if (getEnvCrckgMech != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
                                                 EnvCrckgMech = need24.Value;
                                             }
                                             else
                                             {
+
                                                 var getEnvCrckgNoOfInsp = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Inspection Information"
-                                                                         && x.Label.ToString()=="No. of Inspection").FirstOrDefault();//其實應該要24
+                                                                         && x.Label.ToString() == "No. of Inspection").FirstOrDefault();//其實應該要24
                                                 if (getEnvCrckgNoOfInsp != null && DisplayValue != null)
                                                 {
                                                     EnvCrckgNoOfInsp = DisplayValue.DisplayValue;
@@ -619,7 +980,7 @@ namespace T0NKME06.Controllers
 
 
                             case "EXTERNAL CORROSION":
-                                var getHumidity = get31.Where(x => x.GroupName.ToString() == "Atmospheric Influence"
+                                var getHumidity = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Atmospheric Influence"
                                                                  && x.Label.ToString() == "Humidity").FirstOrDefault();
                                 if (getHumidity != null && DisplayValue != null)
                                 {
@@ -639,7 +1000,7 @@ namespace T0NKME06.Controllers
                                 }
                                 else
                                 {
-                                    var getExtWettingFlag = get31.Where(x => x.GroupName.ToString() == "Atmospheric Influence"
+                                    var getExtWettingFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Atmospheric Influence"
                                                                          && x.Label.ToString() == "Near Cool Tower/Wetting?").FirstOrDefault();//其實應該要24
                                     if (getExtWettingFlag != null && DisplayValue != null)
                                     {
@@ -660,7 +1021,7 @@ namespace T0NKME06.Controllers
                                     else
                                     {
 
-                                        var getExtCorrosionOption = get31.Where(x => x.GroupName.ToString() == "Corrosion Information"
+                                        var getExtCorrosionOption = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
                                                                          && x.Label.ToString() == "Corrosion Option").FirstOrDefault();//其實應該要24
                                         if (getExtCorrosionOption != null && DisplayValue != null)
                                         {
@@ -680,7 +1041,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else
                                         {
-                                            var getExtExpecedCorrRate = get31.Where(x => x.GroupName.ToString() == "Corrosion Information"
+                                            var getExtExpecedCorrRate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
                                                                          && x.Label.ToString() == "Expected").FirstOrDefault();//其實應該要24
                                             if (getExtExpecedCorrRate != null && DisplayValue != null)
                                             {
@@ -704,7 +1065,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else
                                             {//4:13/19
-                                                var getExtMeasuredCorrRate = get31.Where(x => x.GroupName.ToString() == "Corrosion Information"
+                                                var getExtMeasuredCorrRate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
                                                                          && x.Label.ToString() == "Measured").FirstOrDefault();//其實應該要24
                                                 if (getExtMeasuredCorrRate != null && DisplayValue != null)
                                                 {
@@ -724,7 +1085,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else
                                                 {
-                                                    var getExtServDate = get31.Where(x => x.GroupName.ToString() == "Design Information"
+                                                    var getExtServDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Design Information"
                                                                          && x.Label.ToString() == "External Date in Service").FirstOrDefault();//其實應該要24
                                                     if (getExtServDate != null && DisplayValue != null)
                                                     {
@@ -742,234 +1103,209 @@ namespace T0NKME06.Controllers
                                                     {
                                                         ExtServDate = need24.Value;
                                                     }
+
+
                                                     else
                                                     {
-                                                        var getOperatingTemperature = get31.Where(x => x.GroupName.ToString() == "Design Information"
-                                                                         && x.Label.ToString() == "Operating Temperature").FirstOrDefault();//其實應該要24
-                                                        if (getOperatingTemperature != null && DisplayValue != null)
+                                                        var getCUIFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Design Information "
+                                                                     && x.Label.ToString() == "Susceptible to Corrosion?").FirstOrDefault();//其實應該要24
+                                                        if (getCUIFlag != null && DisplayValue != null)
                                                         {
-                                                            var OperatingTemperature1 = Convert.ToDouble(DisplayValue.DisplayValue);
-                                                            OperatingTemp = ((OperatingTemperature1 - 32) * 5) / 9;
+                                                            CUIFlag = DisplayValue.DisplayValue;
                                                         }
-                                                        else if (getOperatingTemperature != null && ProbabilityLabel != null)
+                                                        else if (getCUIFlag != null && ProbabilityLabel != null)
                                                         {
-                                                            var OperatingTemperature1 = Convert.ToDouble(ProbabilityLabel.Label);
-                                                            OperatingTemp = ((OperatingTemperature1 - 32) * 5) / 9;
-
+                                                            CUIFlag = ProbabilityLabel.Label;
                                                         }
-                                                        else if (getOperatingTemperature != null && ConsequenceLabel != null)
+                                                        else if (getCUIFlag != null && ConsequenceLabel != null)
                                                         {
-                                                            var OperatingTemperature1 = Convert.ToDouble(ConsequenceLabel.Label);
-                                                            OperatingTemp = ((OperatingTemperature1 - 32) * 5) / 9;
-
+                                                            CUIFlag = ConsequenceLabel.Label;
                                                         }
-                                                        else if (getOperatingTemperature != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                        else if (getCUIFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            var OperatingTemperature1 = Convert.ToDouble(need24.Value);
-                                                            OperatingTemp = ((OperatingTemperature1 - 32) * 5) / 9;
-
+                                                            CUIFlag = need24.Value;
                                                         }
                                                         else
                                                         {
-                                                            var getCUIFlag = get31.Where(x => x.GroupName.ToString() == "Design Information "
-                                                                         && x.Label.ToString() == "Susceptible to Corrosion?").FirstOrDefault();//其實應該要24
-                                                            if (getCUIFlag != null && DisplayValue != null)
+                                                            var getExtInspConf = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "External Inspection Information"
+                                                                     && x.Label.ToString() == "Confidence").FirstOrDefault();//其實應該要24
+                                                            if (getExtInspConf != null && DisplayValue != null)
                                                             {
-                                                                CUIFlag = DisplayValue.DisplayValue;
+                                                                ExtInspConf = DisplayValue.DisplayValue;
                                                             }
-                                                            else if (getCUIFlag != null && ProbabilityLabel != null)
+                                                            else if (getExtInspConf != null && ProbabilityLabel != null)
                                                             {
-                                                                CUIFlag = ProbabilityLabel.Label;
+                                                                ExtInspConf = ProbabilityLabel.Label;
                                                             }
-                                                            else if (getCUIFlag != null && ConsequenceLabel != null)
+                                                            else if (getExtInspConf != null && ConsequenceLabel != null)
                                                             {
-                                                                CUIFlag = ConsequenceLabel.Label;
+                                                                ExtInspConf = ConsequenceLabel.Label;
                                                             }
-                                                            else if (getCUIFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                            else if (getExtInspConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                             {
-                                                                CUIFlag = need24.Value;
+                                                                ExtInspConf = need24.Value;
                                                             }
                                                             else
                                                             {
-                                                                var getExtInspConf = get31.Where(x => (x.GroupName.ToString() == "External Inspection Information" || x.GroupName.ToString() == "Inspection Information")
-                                                                         && x.Label.ToString() == "Confidence").FirstOrDefault();//其實應該要24
-                                                                if (getExtInspConf != null && DisplayValue != null)
+                                                                var getExtLastInspDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "External Inspection Information"
+                                                                     && x.Label.ToString() == "Date of Last Inspection").FirstOrDefault();//其實應該要24
+                                                                if (getExtLastInspDate != null && DisplayValue != null)
                                                                 {
-                                                                    ExtInspConf = DisplayValue.DisplayValue;
+                                                                    ExtLastInspDate = DisplayValue.DisplayValue;
                                                                 }
-                                                                else if (getExtInspConf != null && ProbabilityLabel != null)
+                                                                else if (getExtLastInspDate != null && ProbabilityLabel != null)
                                                                 {
-                                                                    ExtInspConf = ProbabilityLabel.Label;
+                                                                    ExtLastInspDate = ProbabilityLabel.Label;
                                                                 }
-                                                                else if (getExtInspConf != null && ConsequenceLabel != null)
+                                                                else if (getExtLastInspDate != null && ConsequenceLabel != null)
                                                                 {
-                                                                    ExtInspConf = ConsequenceLabel.Label;
+                                                                    ExtLastInspDate = ConsequenceLabel.Label;
                                                                 }
-                                                                else if (getExtInspConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                else if (getExtLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                 {
-                                                                    ExtInspConf = need24.Value;
+                                                                    ExtLastInspDate = need24.Value;
                                                                 }
                                                                 else
                                                                 {
-                                                                    var getExtLastInspDate = get31.Where(x => (x.GroupName.ToString() == "External Inspection Information" || x.GroupName.ToString() == "Inspection Information")
-                                                                         && x.Label.ToString() == "Date of Last Inspection").FirstOrDefault();//其實應該要24
-                                                                    if (getExtLastInspDate != null && DisplayValue != null)
+                                                                    var getExtNoOfInsp = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "External Inspection Information"
+                                                                     && x.Label.ToString() == "No. of Inspection").FirstOrDefault();//其實應該要24
+                                                                    if (getExtNoOfInsp != null && DisplayValue != null)
                                                                     {
-                                                                        ExtLastInspDate = DisplayValue.DisplayValue;
+                                                                        ExtNoOfInsp = DisplayValue.DisplayValue;
                                                                     }
-                                                                    else if (getExtLastInspDate != null && ProbabilityLabel != null)
+                                                                    else if (getExtNoOfInsp != null && ProbabilityLabel != null)
                                                                     {
-                                                                        ExtLastInspDate = ProbabilityLabel.Label;
+                                                                        ExtNoOfInsp = ProbabilityLabel.Label;
                                                                     }
-                                                                    else if (getExtLastInspDate != null && ConsequenceLabel != null)
+                                                                    else if (getExtNoOfInsp != null && ConsequenceLabel != null)
                                                                     {
-                                                                        ExtLastInspDate = ConsequenceLabel.Label;
+                                                                        ExtNoOfInsp = ConsequenceLabel.Label;
                                                                     }
-                                                                    else if (getExtLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                    else if (getExtNoOfInsp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                     {
-                                                                        ExtLastInspDate = need24.Value;
+                                                                        ExtNoOfInsp = need24.Value;
                                                                     }
                                                                     else
                                                                     {
-                                                                        var getExtNoOfInsp = get31.Where(x => x.GroupName.ToString() == "External Inspection Information" || x.GroupName.ToString() == "Inspection Information"
-                                                                         && x.Label.ToString() == "No. of Inspection").FirstOrDefault();//其實應該要24
-                                                                        if (getExtNoOfInsp != null && DisplayValue != null)
-                                                                        {
-                                                                            ExtNoOfInsp = DisplayValue.DisplayValue;
+                                                                        var getExtCoating = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Insulation Information"
+                                                                    && x.Label.ToString() == "Coating").FirstOrDefault();//其實應該要24
+                                                                        if (getExtCoating != null && DisplayValue != null)
+                                                                        {//4:29/41
+                                                                            ExtCoating = DisplayValue.DisplayValue;
                                                                         }
-                                                                        else if (getExtNoOfInsp != null && ProbabilityLabel != null)
+                                                                        else if (getExtCoating != null && ProbabilityLabel != null)
                                                                         {
-                                                                            ExtNoOfInsp = ProbabilityLabel.Label;
+                                                                            ExtCoating = ProbabilityLabel.Label;
                                                                         }
-                                                                        else if (getExtNoOfInsp != null && ConsequenceLabel != null)
+                                                                        else if (getExtCoating != null && ConsequenceLabel != null)
                                                                         {
-                                                                            ExtNoOfInsp = ConsequenceLabel.Label;
+                                                                            ExtCoating = ConsequenceLabel.Label;
                                                                         }
-                                                                        else if (getExtNoOfInsp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                        else if (getExtCoating != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            ExtNoOfInsp = need24.Value;
+                                                                            ExtCoating = need24.Value;
                                                                         }
                                                                         else
                                                                         {
-                                                                            var getExtCoating = get31.Where(x => x.GroupName.ToString() == "Insulation Information"
-                                                                        && x.Label.ToString() == "Coating").FirstOrDefault();//其實應該要24
-                                                                            if (getExtCoating != null && DisplayValue != null)
-                                                                            {//4:29/41
-                                                                                ExtCoating = DisplayValue.DisplayValue;
-                                                                            }
-                                                                            else if (getExtCoating != null && ProbabilityLabel != null)
+                                                                            var getInsulatedFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Insulation Information"
+                                                                    && x.Label.ToString() == "Insulated?").FirstOrDefault();//其實應該要24
+                                                                            if (getInsulatedFlag != null && DisplayValue != null)
                                                                             {
-                                                                                ExtCoating = ProbabilityLabel.Label;
+                                                                                InsdFlag = DisplayValue.DisplayValue;
                                                                             }
-                                                                            else if (getExtCoating != null && ConsequenceLabel != null)
+                                                                            else if (getInsulatedFlag != null && ProbabilityLabel != null)
                                                                             {
-                                                                                ExtCoating = ConsequenceLabel.Label;
+                                                                                InsdFlag = ProbabilityLabel.Label;
                                                                             }
-                                                                            else if (getExtCoating != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                            else if (getInsulatedFlag != null && ConsequenceLabel != null)
                                                                             {
-                                                                                ExtCoating = need24.Value;
+                                                                                InsdFlag = ConsequenceLabel.Label;
+                                                                            }
+                                                                            else if (getInsulatedFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                            {
+                                                                                InsdFlag = need24.Value;
                                                                             }
                                                                             else
                                                                             {
-                                                                                var getInsulatedFlag = get31.Where(x => x.GroupName.ToString() == "Insulation Information"
-                                                                        && x.Label.ToString() == "Insulated?").FirstOrDefault();//其實應該要24
-                                                                                if (getInsulatedFlag != null && DisplayValue != null)
+                                                                                var getInsulationCondition = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Insulation Information"
+                                                                    && x.Label.ToString() == "Insulation Condition").FirstOrDefault();//其實應該要24
+                                                                                if (getInsulationCondition != null && DisplayValue != null)
                                                                                 {
-                                                                                    InsulatedFlag = DisplayValue.DisplayValue;
+                                                                                    InsdCond = DisplayValue.DisplayValue;
                                                                                 }
-                                                                                else if (getInsulatedFlag != null && ProbabilityLabel != null)
+                                                                                else if (getInsulationCondition != null && ProbabilityLabel != null)
                                                                                 {
-                                                                                    InsulatedFlag = ProbabilityLabel.Label;
+                                                                                    InsdCond = ProbabilityLabel.Label;
                                                                                 }
-                                                                                else if (getInsulatedFlag != null && ConsequenceLabel != null)
+                                                                                else if (getInsulationCondition != null && ConsequenceLabel != null)
                                                                                 {
-                                                                                    InsulatedFlag = ConsequenceLabel.Label;
+                                                                                    InsdCond = ConsequenceLabel.Label;
                                                                                 }
-                                                                                else if (getInsulatedFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                else if (getInsulationCondition != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    InsulatedFlag = need24.Value;
+                                                                                    InsdCond = need24.Value;
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    var getInsulationCondition = get31.Where(x => x.GroupName.ToString() == "Insulation Information"
-                                                                        && x.Label.ToString() == "Insulation Condition").FirstOrDefault();//其實應該要24
-                                                                                    if (getInsulationCondition != null && DisplayValue != null)
+                                                                                    var getInsulationType = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Insulation Information"
+                                                                    && x.Label.ToString() == "Insulation Type").FirstOrDefault();//其實應該要24
+                                                                                    if (getInsulationType != null && DisplayValue != null)
                                                                                     {
-                                                                                        InsulationCondition = DisplayValue.DisplayValue;
+                                                                                        InsdType = DisplayValue.DisplayValue;
                                                                                     }
-                                                                                    else if (getInsulationCondition != null && ProbabilityLabel != null)
+                                                                                    else if (getInsulationType != null && ProbabilityLabel != null)
                                                                                     {
-                                                                                        InsulationCondition = ProbabilityLabel.Label;
+                                                                                        InsdType = ProbabilityLabel.Label;
                                                                                     }
-                                                                                    else if (getInsulationCondition != null && ConsequenceLabel != null)
+                                                                                    else if (getInsulationType != null && ConsequenceLabel != null)
                                                                                     {
-                                                                                        InsulationCondition = ConsequenceLabel.Label;
+                                                                                        InsdType = ConsequenceLabel.Label;
                                                                                     }
-                                                                                    else if (getInsulationCondition != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                    else if (getInsulationType != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                     {
-                                                                                        InsulationCondition = need24.Value;
+                                                                                        InsdType = need24.Value;
                                                                                     }
                                                                                     else
-                                                                                    {
-                                                                                        var getInsulationType = get31.Where(x => x.GroupName.ToString() == "Insulation Information"
-                                                                        && x.Label.ToString() == "Insulation Type").FirstOrDefault();//其實應該要24
-                                                                                        if (getInsulationType != null && DisplayValue != null)
+                                                                                    { //!!!!超級奇怪
+                                                                                        var getExtCalcCorrRate = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
+                                                                                        && x.Label.ToString() == "Calculated Corrosion Rate").FirstOrDefault();//其實應該要24
+                                                                                        if (getExtCalcCorrRate != null && DisplayValue25 != null)
                                                                                         {
-                                                                                            InsulationType = DisplayValue.DisplayValue;
+                                                                                            ExtCalcCorrRate = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
+
                                                                                         }
-                                                                                        else if (getInsulationType != null && ProbabilityLabel != null)
+                                                                                        else if (getExtCalcCorrRate != null && ProbabilityLabel25 != null)
                                                                                         {
-                                                                                            InsulationType = ProbabilityLabel.Label;
+                                                                                            ExtCalcCorrRate = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
+
                                                                                         }
-                                                                                        else if (getInsulationType != null && ConsequenceLabel != null)
+                                                                                        else if (getExtCalcCorrRate != null && ConsequenceLabel25 != null)
                                                                                         {
-                                                                                            InsulationType = ConsequenceLabel.Label;
+                                                                                            ExtCalcCorrRate = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
+
                                                                                         }
-                                                                                        else if (getInsulationType != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                        else if (getExtCalcCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                         {
-                                                                                            InsulationType = need24.Value;
+
+                                                                                            ExtCalcCorrRate = need24.ExtCalcCorrRate * 25.4;
+                                                                                            //ExtCalcCorrRate = Convert.ToDouble(need24.Value25) * 25.4;
+
                                                                                         }
-                                                                                        else
-                                                                                        { //!!!!超級奇怪
-                                                                                            var getExtCalcCorrRate = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
-                                                                                            && x.Label.ToString() == "Calculated Corrosion Rate").FirstOrDefault();//其實應該要24
-                                                                                            if (getExtCalcCorrRate != null && DisplayValue25 != null)
-                                                                                            {
-                                                                                                ExtCalcCorrRate = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
-
-                                                                                            }
-                                                                                            else if (getExtCalcCorrRate != null && ProbabilityLabel25 != null)
-                                                                                            {
-                                                                                                ExtCalcCorrRate = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
-
-                                                                                            }
-                                                                                            else if (getExtCalcCorrRate != null && ConsequenceLabel25 != null)
-                                                                                            {
-                                                                                                ExtCalcCorrRate = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
-
-                                                                                            }
-                                                                                            else if (getExtCalcCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
-                                                                                            {
-
-                                                                                                ExtCalcCorrRate = Convert.ToDouble(need24.ExtCalcCorrRate) * 25.4;
-                                                                                                //ExtCalcCorrRate = Convert.ToDouble(need24.Value25) * 25.4;
-
-                                                                                            }
-                                                                                            //用30的不是31的 var ExtCalcCorrRate = getAllComponent.Where(x => x.NodeLabel.ToString() == "EXTERNAL CORROSION" && x.GroupName.ToString() == "Corrosion Information"
-                                                                                            //&& x.Label.ToString() == "Corrosion Option").Select(x => new { x.Value }).FirstOrDefault();
-                                                                                        }
-
+                                                                                        //用30的不是31的 var ExtCalcCorrRate = getAllComponent.Where(x => x.NodeLabel.ToString() == "EXTERNAL CORROSION" && x.GroupName.ToString() == "Corrosion Information"
+                                                                                        //&& x.Label.ToString() == "Corrosion Option").Select(x => new { x.Value }).FirstOrDefault();
                                                                                     }
+
                                                                                 }
                                                                             }
                                                                         }
                                                                     }
                                                                 }
                                                             }
-
-
                                                         }
+
+
                                                     }
+
                                                 }
 
 
@@ -1244,22 +1580,22 @@ namespace T0NKME06.Controllers
                                                                         && x.Label.ToString() == "Design Pressure").FirstOrDefault();//其實應該要24
                                                         if (getDesignPressure != null && DisplayValue != null)
                                                         {
-                                                            DesignPressure = Convert.ToDouble(DisplayValue.DisplayValue) * 0.0689476;
+                                                            DesignPressure = Convert.ToDouble(DisplayValue.DisplayValue) * 25.4;
 
                                                         }
                                                         else if (getDesignPressure != null && ProbabilityLabel != null)
                                                         {
-                                                            DesignPressure = Convert.ToDouble(ProbabilityLabel.Label) * 0.0689476;
+                                                            DesignPressure = Convert.ToDouble(ProbabilityLabel.Label) * 25.4;
 
                                                         }
                                                         else if (getDesignPressure != null && ConsequenceLabel != null)
                                                         {
-                                                            DesignPressure = Convert.ToDouble(ConsequenceLabel.Label) * 0.0689476;
+                                                            DesignPressure = Convert.ToDouble(ConsequenceLabel.Label) * 25.4;
 
                                                         }
                                                         else if (getDesignPressure != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            DesignPressure = Convert.ToDouble(need24.Value) * 0.0689476;
+                                                            DesignPressure = Convert.ToDouble(need24.Value) * 25.4;
 
                                                         }
                                                         else
@@ -1343,300 +1679,324 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                     else
                                                                     {
-                                                                        var getAnalysisDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "General Information、NULL"
-                                                                && x.Label.ToString() == "Analysis Date").FirstOrDefault();//其實應該要24
-                                                                        if (getAnalysisDate != null && DisplayValue != null)
+                                                                        var getODOverride = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Design Information"
+                                                                        && x.Label.ToString() == "Override Outside Diameter ").FirstOrDefault();//其實應該要24
+                                                                        if (getODOverride != null && DisplayValue != null)
                                                                         {
-                                                                            AnalysisDate = DisplayValue.DisplayValue;
+                                                                            ODOverride = Convert.ToDouble(DisplayValue.DisplayValue) * 25.4;
+
                                                                         }
-                                                                        else if (getAnalysisDate != null && ProbabilityLabel != null)
+                                                                        else if (getODOverride != null && ProbabilityLabel != null)
                                                                         {
-                                                                            AnalysisDate = ProbabilityLabel.Label;
+                                                                            ODOverride = Convert.ToDouble(ProbabilityLabel.Label) * 25.4;
+
                                                                         }
-                                                                        else if (getAnalysisDate != null && ConsequenceLabel != null)
+                                                                        else if (getODOverride != null && ConsequenceLabel != null)
                                                                         {
-                                                                            AnalysisDate = ConsequenceLabel.Label;
+                                                                            ODOverride = Convert.ToDouble(ConsequenceLabel.Label) * 25.4;
+
                                                                         }
-                                                                        else if (getAnalysisDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                        else if (getODOverride != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            AnalysisDate = need24.Value;
+                                                                            ODOverride = Convert.ToDouble(need24.Value) * 25.4;
+
                                                                         }
                                                                         else
                                                                         {
-                                                                            var getIntInpsConf = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Internal Inspection Information"
-                                                               && x.Label.ToString() == "Confidence").FirstOrDefault();//其實應該要24
-                                                                            if (getIntInpsConf != null && DisplayValue != null)
+                                                                            var getODOverrideFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Design Information"
+                                                                        && x.Label.ToString() == "Override Outside Diameter?").FirstOrDefault();//其實應該要24
+                                                                            if (getODOverrideFlag != null && DisplayValue != null)
                                                                             {
-                                                                                IntInpsConf = DisplayValue.DisplayValue;
+                                                                                ODOverrideFlag = DisplayValue.DisplayValue;
                                                                             }
-                                                                            else if (getIntInpsConf != null && ProbabilityLabel != null)
+                                                                            else if (getODOverrideFlag != null && ProbabilityLabel != null)
                                                                             {
-                                                                                IntInpsConf = ProbabilityLabel.Label;
+                                                                                ODOverrideFlag = ProbabilityLabel.Label;
                                                                             }
-                                                                            else if (getIntInpsConf != null && ConsequenceLabel != null)
+                                                                            else if (getODOverrideFlag != null && ConsequenceLabel != null)
                                                                             {
-                                                                                IntInpsConf = ConsequenceLabel.Label;
+                                                                                ODOverrideFlag = ConsequenceLabel.Label;
                                                                             }
-                                                                            else if (getIntInpsConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                            else if (getODOverrideFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                IntInpsConf = need24.Value;
+                                                                                ODOverrideFlag = need24.Value;
                                                                             }
                                                                             else
                                                                             {
-                                                                                var getIntLastInspDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Internal Inspection Information"
-                                                               && x.Label.ToString() == "Date of Last Inspection").FirstOrDefault();//其實應該要24
-                                                                                if (getIntLastInspDate != null && DisplayValue != null)
+                                                                                var getAnalysisDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "General Information、NULL"
+                                                                        && x.Label.ToString() == "Analysis Date").FirstOrDefault();//其實應該要24
+                                                                                if (getAnalysisDate != null && DisplayValue != null)
                                                                                 {
-                                                                                    IntLastInspDate = DisplayValue.DisplayValue;
+                                                                                    AnalysisDate = DisplayValue.DisplayValue;
                                                                                 }
-                                                                                else if (getIntLastInspDate != null && ProbabilityLabel != null)
+                                                                                else if (getAnalysisDate != null && ProbabilityLabel != null)
                                                                                 {
-                                                                                    IntLastInspDate = ProbabilityLabel.Label;
+                                                                                    AnalysisDate = ProbabilityLabel.Label;
                                                                                 }
-                                                                                else if (getIntLastInspDate != null && ConsequenceLabel != null)
+                                                                                else if (getAnalysisDate != null && ConsequenceLabel != null)
                                                                                 {
-                                                                                    IntLastInspDate = ConsequenceLabel.Label;
+                                                                                    AnalysisDate = ConsequenceLabel.Label;
                                                                                 }
-                                                                                else if (getIntLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && need24.ConsequenceLabel == null)
+                                                                                else if (getAnalysisDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    IntLastInspDate = need24.Value;
+                                                                                    AnalysisDate = need24.Value;
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    var getIntNoOfInps = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Internal Inspection Information"
-                                                               && x.Label.ToString() == "No. of Inspection").FirstOrDefault();//其實應該要24
-                                                                                    if (getIntNoOfInps != null && DisplayValue != null)
+                                                                                    var getIntInpsConf = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Internal Inspection Information"
+                                                                       && x.Label.ToString() == "Confidence").FirstOrDefault();//其實應該要24
+                                                                                    if (getIntInpsConf != null && DisplayValue != null)
                                                                                     {
-                                                                                        IntNoOfInps = DisplayValue.DisplayValue;
+                                                                                        IntInpsConf = DisplayValue.DisplayValue;
                                                                                     }
-                                                                                    else if (getIntNoOfInps != null && ProbabilityLabel != null)
+                                                                                    else if (getIntInpsConf != null && ProbabilityLabel != null)
                                                                                     {
-                                                                                        IntNoOfInps = ProbabilityLabel.Label;
+                                                                                        IntInpsConf = ProbabilityLabel.Label;
                                                                                     }
-                                                                                    else if (getIntNoOfInps != null && ConsequenceLabel != null)
+                                                                                    else if (getIntInpsConf != null && ConsequenceLabel != null)
                                                                                     {
-                                                                                        IntNoOfInps = ConsequenceLabel.Label;
+                                                                                        IntInpsConf = ConsequenceLabel.Label;
                                                                                     }
-                                                                                    else if (getIntNoOfInps != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                    else if (getIntInpsConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                     {
-                                                                                        IntNoOfInps = need24.Value;
+                                                                                        IntInpsConf = need24.Value;
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        var getConstCode = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
-                                                               && x.Label.ToString() == "Construction Code").FirstOrDefault();//其實應該要24
-                                                                                        if (getConstCode != null && DisplayValue != null)
+                                                                                        var getIntLastInspDate = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Internal Inspection Information"
+                                                                       && x.Label.ToString() == "Date of Last Inspection").FirstOrDefault();//其實應該要24
+                                                                                        if (getIntLastInspDate != null && DisplayValue != null)
                                                                                         {
-                                                                                            ConstCode = DisplayValue.DisplayValue;
+                                                                                            IntLastInspDate = DisplayValue.DisplayValue;
                                                                                         }
-                                                                                        else if (getConstCode != null && ProbabilityLabel != null)
+                                                                                        else if (getIntLastInspDate != null && ProbabilityLabel != null)
                                                                                         {
-                                                                                            ConstCode = ProbabilityLabel.Label;
+                                                                                            IntLastInspDate = ProbabilityLabel.Label;
                                                                                         }
-                                                                                        else if (getConstCode != null && ConsequenceLabel != null)
+                                                                                        else if (getIntLastInspDate != null && ConsequenceLabel != null)
                                                                                         {
-                                                                                            ConstCode = ConsequenceLabel.Label;
+                                                                                            IntLastInspDate = ConsequenceLabel.Label;
                                                                                         }
-                                                                                        else if (getConstCode != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                        else if (getIntLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && need24.ConsequenceLabel == null)
                                                                                         {
-                                                                                            ConstCode = need24.Value;
+                                                                                            IntLastInspDate = need24.Value;
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            var getJointEfficiency = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
-                                                               && x.Label.ToString() == "Joint Efficiency").FirstOrDefault();//其實應該要24
-                                                                                            if (getJointEfficiency != null && DisplayValue != null)
+                                                                                            var getIntNoOfInps = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Internal Inspection Information"
+                                                                       && x.Label.ToString() == "No. of Inspection").FirstOrDefault();//其實應該要24
+                                                                                            if (getIntNoOfInps != null && DisplayValue != null)
                                                                                             {
-                                                                                                JointEfficiency = DisplayValue.DisplayValue;
+                                                                                                IntNoOfInps = DisplayValue.DisplayValue;
                                                                                             }
-                                                                                            else if (getJointEfficiency != null && ProbabilityLabel != null)
+                                                                                            else if (getIntNoOfInps != null && ProbabilityLabel != null)
                                                                                             {
-                                                                                                JointEfficiency = ProbabilityLabel.Label;
+                                                                                                IntNoOfInps = ProbabilityLabel.Label;
                                                                                             }
-                                                                                            else if (getJointEfficiency != null && ConsequenceLabel != null)
+                                                                                            else if (getIntNoOfInps != null && ConsequenceLabel != null)
                                                                                             {
-                                                                                                JointEfficiency = ConsequenceLabel.Label;
+                                                                                                IntNoOfInps = ConsequenceLabel.Label;
                                                                                             }
-                                                                                            else if (getJointEfficiency != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                            else if (getIntNoOfInps != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                             {
-                                                                                                JointEfficiency = need24.Value;
+                                                                                                IntNoOfInps = need24.Value;
                                                                                             }
                                                                                             else
                                                                                             {
-                                                                                                var getOverideAllowableStress = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
-                                                               && x.Label.ToString() == "Override Allowable Stress").FirstOrDefault();//其實應該要24
-                                                                                                if (getOverideAllowableStress != null && DisplayValue != null)
+                                                                                                var getConstCode = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
+                                                                       && x.Label.ToString() == "Construction Code").FirstOrDefault();//其實應該要24
+                                                                                                if (getConstCode != null && DisplayValue != null)
                                                                                                 {
-                                                                                                    OverideAllowableStress = Convert.ToDouble(DisplayValue.DisplayValue) * 0.0689476;
-
+                                                                                                    ConstCode = DisplayValue.DisplayValue;
                                                                                                 }
-                                                                                                else if (getOverideAllowableStress != null && ProbabilityLabel != null)
+                                                                                                else if (getConstCode != null && ProbabilityLabel != null)
                                                                                                 {
-                                                                                                    OverideAllowableStress = Convert.ToDouble(ProbabilityLabel.Label) * 0.0689476;
-
+                                                                                                    ConstCode = ProbabilityLabel.Label;
                                                                                                 }
-                                                                                                else if (getOverideAllowableStress != null && ConsequenceLabel != null)
+                                                                                                else if (getConstCode != null && ConsequenceLabel != null)
                                                                                                 {
-                                                                                                    OverideAllowableStress = Convert.ToDouble(ConsequenceLabel.Label) * 0.0689476;
-
+                                                                                                    ConstCode = ConsequenceLabel.Label;
                                                                                                 }
-                                                                                                else if (getOverideAllowableStress != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                else if (getConstCode != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                 {
-                                                                                                    OverideAllowableStress = Convert.ToDouble(need24.Value) * 0.0689476;
-
+                                                                                                    ConstCode = need24.Value;
                                                                                                 }
                                                                                                 else
                                                                                                 {
-                                                                                                    var getOverideAllowableStressFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
-                                                               && x.Label.ToString() == "Override Allowable Stress?").FirstOrDefault();//其實應該要24
-                                                                                                    if (getOverideAllowableStressFlag != null && DisplayValue != null)
+                                                                                                    var getJointEfficiency = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
+                                                                       && x.Label.ToString() == "Joint Efficiency").FirstOrDefault();//其實應該要24
+                                                                                                    if (getJointEfficiency != null && DisplayValue != null)
                                                                                                     {
-                                                                                                        OverideAllowableStressFlag = DisplayValue.DisplayValue;
+                                                                                                        JointEfficiency = DisplayValue.DisplayValue;
                                                                                                     }
-                                                                                                    else if (getOverideAllowableStressFlag != null && ProbabilityLabel != null)
+                                                                                                    else if (getJointEfficiency != null && ProbabilityLabel != null)
                                                                                                     {
-                                                                                                        OverideAllowableStressFlag = ProbabilityLabel.Label;
+                                                                                                        JointEfficiency = ProbabilityLabel.Label;
                                                                                                     }
-                                                                                                    else if (getOverideAllowableStressFlag != null && ConsequenceLabel != null)
+                                                                                                    else if (getJointEfficiency != null && ConsequenceLabel != null)
                                                                                                     {
-                                                                                                        OverideAllowableStressFlag = ConsequenceLabel.Label;
+                                                                                                        JointEfficiency = ConsequenceLabel.Label;
                                                                                                     }
-                                                                                                    else if (getOverideAllowableStressFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                    else if (getJointEfficiency != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                     {
-                                                                                                        OverideAllowableStressFlag = need24.Value;
+                                                                                                        JointEfficiency = need24.Value;
                                                                                                     }
                                                                                                     else
                                                                                                     {
-                                                                                                        var getEstMinThicknessFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
-                                                               && x.Label.ToString() == "Override Est. Min. Thickness?").FirstOrDefault();//其實應該要24
-                                                                                                        if (getEstMinThicknessFlag != null && DisplayValue != null)
+                                                                                                        var getOverideAllowableStress = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
+                                                                       && x.Label.ToString() == "Override Allowable Stress").FirstOrDefault();//其實應該要24
+                                                                                                        if (getOverideAllowableStress != null && DisplayValue != null)
                                                                                                         {
-                                                                                                            EstMinThicknessFlag = DisplayValue.DisplayValue;
-                                                                                                        }
-                                                                                                        else if (getEstMinThicknessFlag != null && ProbabilityLabel != null)
-                                                                                                        {
-                                                                                                            EstMinThicknessFlag = ProbabilityLabel.Label;
-                                                                                                        }
-                                                                                                        else if (getEstMinThicknessFlag != null && ConsequenceLabel != null)
-                                                                                                        {
-                                                                                                            EstMinThicknessFlag = ConsequenceLabel.Label;
-                                                                                                        }
+                                                                                                            OverideAllowableStress = Convert.ToDouble(DisplayValue.DisplayValue) * 0.0689476;
 
-                                                                                                        else if (getEstMinThicknessFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                        }
+                                                                                                        else if (getOverideAllowableStress != null && ProbabilityLabel != null)
                                                                                                         {
-                                                                                                            EstMinThicknessFlag = need24.Value;
+                                                                                                            OverideAllowableStress = Convert.ToDouble(ProbabilityLabel.Label) * 0.0689476;
+
+                                                                                                        }
+                                                                                                        else if (getOverideAllowableStress != null && ConsequenceLabel != null)
+                                                                                                        {
+                                                                                                            OverideAllowableStress = Convert.ToDouble(ConsequenceLabel.Label) * 0.0689476;
+
+                                                                                                        }
+                                                                                                        else if (getOverideAllowableStress != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                        {
+                                                                                                            OverideAllowableStress = Convert.ToDouble(need24.Value) * 0.0689476;
+
                                                                                                         }
                                                                                                         else
                                                                                                         {
-                                                                                                            var getEstMinThickness = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
-                                                          && x.Label.ToString() == "Override Est. Min. Thickness").FirstOrDefault();
-                                                                                                            if (getEstMinThickness != null && DisplayValue25 != null)
+                                                                                                            var getOverideAllowableStressFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Stress Material Information"
+                                                                       && x.Label.ToString() == "Override Allowable Stress?").FirstOrDefault();//其實應該要24
+                                                                                                            if (getOverideAllowableStressFlag != null && DisplayValue != null)
                                                                                                             {
-                                                                                                                EstMinThickness = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
+                                                                                                                OverideAllowableStressFlag = DisplayValue.DisplayValue;
                                                                                                             }
-                                                                                                            else if (getEstMinThickness != null && ProbabilityLabel25 != null)
+                                                                                                            else if (getOverideAllowableStressFlag != null && ProbabilityLabel != null)
                                                                                                             {
-                                                                                                                EstMinThickness = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
+                                                                                                                OverideAllowableStressFlag = ProbabilityLabel.Label;
                                                                                                             }
-                                                                                                            else if (getEstMinThickness != null && ConsequenceLabel25 != null)
+                                                                                                            else if (getOverideAllowableStressFlag != null && ConsequenceLabel != null)
                                                                                                             {
-                                                                                                                EstMinThickness = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
+                                                                                                                OverideAllowableStressFlag = ConsequenceLabel.Label;
                                                                                                             }
-
-                                                                                                            else if (getEstMinThickness != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                            else if (getOverideAllowableStressFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                             {
-                                                                                                                EstMinThickness = Convert.ToDouble(need24.Value25) * 25.4;
+                                                                                                                OverideAllowableStressFlag = need24.Value;
                                                                                                             }
                                                                                                             else
                                                                                                             {
-                                                                                                                var getIntEstWallRemain = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
-                                                            && x.Label.ToString() == "Estimated Wall Remaining").FirstOrDefault();
-                                                                                                                if (getIntEstWallRemain != null && DisplayValue25 != null)
+                                                                                                                var getEstMinThicknessFlag = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
+                                                                       && x.Label.ToString() == "Override Est. Min. Thickness?").FirstOrDefault();//其實應該要24
+                                                                                                                if (getEstMinThicknessFlag != null && DisplayValue != null)
                                                                                                                 {
-                                                                                                                    IntEstWallRemain = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
+                                                                                                                    EstMinThicknessFlag = DisplayValue.DisplayValue;
                                                                                                                 }
-                                                                                                                else if (getIntEstWallRemain != null && ProbabilityLabel25 != null)
+                                                                                                                else if (getEstMinThicknessFlag != null && ProbabilityLabel != null)
                                                                                                                 {
-                                                                                                                    IntEstWallRemain = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
+                                                                                                                    EstMinThicknessFlag = ProbabilityLabel.Label;
                                                                                                                 }
-                                                                                                                else if (getIntEstWallRemain != null && ConsequenceLabel25 != null)
+                                                                                                                else if (getEstMinThicknessFlag != null && ConsequenceLabel != null)
                                                                                                                 {
-                                                                                                                    IntEstWallRemain = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
+                                                                                                                    EstMinThicknessFlag = ConsequenceLabel.Label;
                                                                                                                 }
 
-                                                                                                                else if (getIntEstWallRemain != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                                else if (getEstMinThicknessFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                                 {
-                                                                                                                    IntEstWallRemain = Convert.ToDouble(need24.Value25) * 25.4;
+                                                                                                                    EstMinThicknessFlag = need24.Value;
                                                                                                                 }
                                                                                                                 else
                                                                                                                 {
-                                                                                                                    var getEstHalfLife = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Calculations"
-                                                           && x.Label.ToString() == "Estimated Half Life").FirstOrDefault();
-                                                                                                                    if (getEstHalfLife != null && DisplayValue25 != null)
+                                                                                                                    var getEstMinThickness = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
+                                                                  && x.Label.ToString() == "Est. Min. Thickness").FirstOrDefault();
+                                                                                                                    if (getEstMinThicknessFlag != null && DisplayValue25 != null)
                                                                                                                     {
-                                                                                                                        EstHalfLife = DisplayValue25.DisplayValue;
+                                                                                                                        EstMinThickness = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
                                                                                                                     }
-                                                                                                                    else if (getEstHalfLife != null && ProbabilityLabel25 != null)
+                                                                                                                    else if (getEstMinThickness != null && ProbabilityLabel25 != null)
                                                                                                                     {
-                                                                                                                        EstHalfLife = ProbabilityLabel25.Label;
+                                                                                                                        EstMinThickness = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
                                                                                                                     }
-                                                                                                                    else if (getEstHalfLife != null && ConsequenceLabel25 != null)
+                                                                                                                    else if (getEstMinThickness != null && ConsequenceLabel25 != null)
                                                                                                                     {
-                                                                                                                        EstHalfLife = ConsequenceLabel25.Label;
+                                                                                                                        EstMinThickness = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
                                                                                                                     }
 
-                                                                                                                    else if (getEstHalfLife != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                                    else if (getEstMinThickness != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
                                                                                                                     {
-                                                                                                                        EstHalfLife = need24.Value25;
+                                                                                                                        EstMinThickness = Convert.ToDouble(need24.Value25) * 25.4;
                                                                                                                     }
                                                                                                                     else
                                                                                                                     {
-
-                                                                                                                        var getRepThick = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Design Information"
-                                                         && (x.Label.ToString() == "Initial Floor Thickness" || x.Label.ToString() == "Initial Wall Thickness")).FirstOrDefault();
-                                                                                                                        if (getRepThick != null && DisplayValue != null)
+                                                                                                                        var getIntEstWallRemain = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
+                                                                    && x.Label.ToString() == "Estimated Wall Remaining").FirstOrDefault();
+                                                                                                                        if (getIntEstWallRemain != null && DisplayValue25 != null)
                                                                                                                         {
-
-                                                                                                                            RepThick = Convert.ToDouble(DisplayValue.DisplayValue) * 25.4;
+                                                                                                                            IntEstWallRemain = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
                                                                                                                         }
-                                                                                                                        else if (getRepThick != null && ProbabilityLabel != null)
+                                                                                                                        else if (getIntEstWallRemain != null && ProbabilityLabel25 != null)
                                                                                                                         {
-                                                                                                                            RepThick = Convert.ToDouble(ProbabilityLabel.Label) * 25.4;
-
+                                                                                                                            IntEstWallRemain = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
                                                                                                                         }
-                                                                                                                        else if (getRepThick != null && ConsequenceLabel != null)
+                                                                                                                        else if (getIntEstWallRemain != null && ConsequenceLabel25 != null)
                                                                                                                         {
-                                                                                                                            RepThick = Convert.ToDouble(ConsequenceLabel.Label) * 25.4;
-
+                                                                                                                            IntEstWallRemain = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
                                                                                                                         }
 
-                                                                                                                        else if (getRepThick != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                                        else if (getIntEstWallRemain != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
                                                                                                                         {
-                                                                                                                            RepThick = Convert.ToDouble(need24.Value) * 25.4;
-
+                                                                                                                            IntEstWallRemain = Convert.ToDouble(need24.Value25) * 25.4;
                                                                                                                         }
                                                                                                                         else
                                                                                                                         {
-                                                                                                                            var getEstMinThickness2 = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
-                                                          && x.Label.ToString() == "Est. Min. Thickness").FirstOrDefault();
-                                                                                                                            if (getEstMinThickness2 != null && DisplayValue25 != null)
+                                                                                                                            var getEstHalfLife = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Calculations"
+                                                                   && x.Label.ToString() == "Estimated Half Life").FirstOrDefault();
+                                                                                                                            if (getEstHalfLife != null && DisplayValue25 != null)
                                                                                                                             {
-                                                                                                                                EstMinThickness2 = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
+                                                                                                                                EstHalfLife = DisplayValue25.DisplayValue;
                                                                                                                             }
-                                                                                                                            else if (getEstMinThickness2 != null && ProbabilityLabel25 != null)
+                                                                                                                            else if (getEstHalfLife != null && ProbabilityLabel25 != null)
                                                                                                                             {
-                                                                                                                                EstMinThickness2 = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
+                                                                                                                                EstHalfLife = ProbabilityLabel25.Label;
                                                                                                                             }
-                                                                                                                            else if (getEstMinThickness2 != null && ConsequenceLabel25 != null)
+                                                                                                                            else if (getEstHalfLife != null && ConsequenceLabel25 != null)
                                                                                                                             {
-                                                                                                                                EstMinThickness2 = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
-                                                                                                                            }
-
-                                                                                                                            else if (getEstMinThickness2 != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
-                                                                                                                            {
-                                                                                                                                EstMinThickness2 = 0;
+                                                                                                                                EstHalfLife = ConsequenceLabel25.Label;
                                                                                                                             }
 
+                                                                                                                            else if (getEstHalfLife != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                                            {
+                                                                                                                                EstHalfLife = need24.Value25;
+                                                                                                                            }
+                                                                                                                            else
+                                                                                                                            {
+
+                                                                                                                                var getRepThick = get31.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Design Information"
+                                                                 && (x.Label.ToString() == "Initial Floor Thickness" || x.Label.ToString() == "Initial Wall Thickness")).FirstOrDefault();
+                                                                                                                                if (getRepThick != null && DisplayValue != null)
+                                                                                                                                {
+
+                                                                                                                                    RepThick = Convert.ToDouble(DisplayValue.DisplayValue) * 25.4;
+                                                                                                                                }
+                                                                                                                                else if (getRepThick != null && ProbabilityLabel != null)
+                                                                                                                                {
+                                                                                                                                    RepThick = Convert.ToDouble(ProbabilityLabel.Label) * 25.4;
+
+                                                                                                                                }
+                                                                                                                                else if (getRepThick != null && ConsequenceLabel != null)
+                                                                                                                                {
+                                                                                                                                    RepThick = Convert.ToDouble(ConsequenceLabel.Label) * 25.4;
+
+                                                                                                                                }
+
+                                                                                                                                else if (getRepThick != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                                                {
+                                                                                                                                    RepThick = Convert.ToDouble(need24.Value) * 25.4;
+
+                                                                                                                                }
+
+                                                                                                                            }
                                                                                                                         }
                                                                                                                     }
                                                                                                                 }
@@ -1644,9 +2004,9 @@ namespace T0NKME06.Controllers
                                                                                                         }
                                                                                                     }
                                                                                                 }
+
                                                                                             }
                                                                                         }
-
                                                                                     }
                                                                                 }
                                                                             }
@@ -1654,8 +2014,6 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                 }
                                                             }
-
-
 
 
                                                         }
@@ -2072,7 +2430,7 @@ namespace T0NKME06.Controllers
                                                                                                                 ODM5Comment = ConsequenceLabel.Label;
                                                                                                             }
 
-                                                                                                            else  if (getODM5Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
+                                                                                                            else if (getODM5Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                             {
                                                                                                                 ODM5Comment = need24.Value;
                                                                                                             }
@@ -2122,16 +2480,36 @@ namespace T0NKME06.Controllers
 
 
                         }
-                        
-       
+                        //need24.OverallRisk = OverallRisk.Select(x => x.OverallRisk).FirstOrDefault();
+                        //need24.ModelName = ModelName.Select(x => x.ModelName).FirstOrDefault();
+                        // need24.OverallRisk = OverallRisk.OverallRisk;
+                        //need24.ModelName = ModelName.ToString();
+
+                        need24.JacketedFlag = JacketedFlag;
+                        need24.IntEntryPossFlag = IntEntryPossFlag;
+                        need24.InjectionPointFlag = InjectionPointFlag;
+                        need24.MixedBoreFlag = MixedBoreFlag;
+                        need24.SmallBoreFlag = SmallBoreFlag;
+                        need24.NoBarrPenetrations = NoBarrPenetrations;
+                        need24.NoDmgdInsd = NoDmgdInsd;
+                        need24.NoDeadLegs = NoDeadLegs;
+                        need24.NoElbows = NoElbows;
+                        need24.NoErosionZones = NoErosionZones;
+                        need24.NoHorizLowPts = NoHorizLowPts;
+                        need24.NoInsdTerminators = NoInsdTerminators;
+                        need24.NoLongHorizRuns = NoLongHorizRuns;
+                        need24.NoReducers = NoReducers;
+                        need24.NoSoilToAirIntfs = NoSoilToAirIntfs;
+                        need24.NoTees = NoTees;
+                        need24.NoVertRuns = NoVertRuns;
 
                         need24.DetectionTime = DetectionTime;
                         need24.IsolationTime = IsolationTime;
                         need24.DikeArea = DikeArea;
                         need24.DikedFlag = DikedFlag;
                         need24.Inventory = Inventory;
-                        need24.OperatingPressure = OperatingPressure;
-                        need24.OperatingTemp = OperatingTemp;
+                        need24.OpernPress = OpernPress;
+                        need24.OpernTemp = OpernTemp;
                         need24.RepFluid = RepFluid;
                         need24.ProductionLoss = ProductionLoss;
                         need24.PercentToxic = PercentToxic;
@@ -2150,15 +2528,15 @@ namespace T0NKME06.Controllers
                         need24.ExtExpecedCorrRate = ExtExpecedCorrRate;
                         need24.ExtMeasuredCorrRate = ExtMeasuredCorrRate;
                         need24.ExtServDate = ExtServDate;
-                        need24.OperatingTemp = OperatingTemp;
+                        need24.OperatingTemperature = OperatingTemperature;
                         need24.CUIFlag = CUIFlag;
                         need24.ExtInspConf = ExtInspConf;
                         need24.ExtLastInspDate = ExtLastInspDate;
                         need24.ExtNoOfInsp = ExtNoOfInsp;
                         need24.ExtCoating = ExtCoating;
-                        need24.InsulatedFlag = InsulatedFlag;
-                        need24.InsulationCondition = InsulationCondition;
-                        need24.InsulationType = InsulationType;
+                        need24.InsdFlag = InsdFlag;
+                        need24.InsdCond = InsdCond;
+                        need24.InsdType = InsdType;
 
                         need24.OverideAllowableStress = OverideAllowableStress;
                         need24.BoilingPoint = BoilingPoint;
@@ -2201,19 +2579,31 @@ namespace T0NKME06.Controllers
 
 
 
+                        }
+                        
 
+                    });
 
-                    }
+                   
+                    string end = (DateTime.Now.ToString("HH:mm ss tt"));
 
-                    return Json(DataList_T0NKME07model);
+                    var response = new
+                    {
+
+                        startTime = start.ToString(),
+                        m1 = m1.ToString(),
+                        m2 = m2.ToString(),
+                        endTime = end.ToString(),
+                        Data = DataList_T0NKME06model
+                    };
+
+                    //Console.WriteLine(start, end);
+                    return Ok(response);
+
+                    return Ok(DataList_T0NKME06model);
                     var fileName = "T0NKME01" + Guid.NewGuid().ToString() + ".xlsx";
-                   // var guidFileName = DataList_T0NKME07model.ExportExcel<T0NKME06model>(fileName, "sheet");
+                    var guidFileName = DataList_T0NKME06model.ExportExcel<T0NKME06model>(fileName, "sheet");
 
-
-                    
-
-
-                    
                 }
 
             }

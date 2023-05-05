@@ -44,5 +44,7 @@ namespace T0NKME06.Models
         public virtual DbSet<InspectionPlanTasks> InspectionPlanTasks { get; set; }
         public virtual DbSet<MitigationColumns> MitigationColumns { get; set; }
         public virtual DbSet<Recommendations> Recommendations { get; set; }
+        public virtual DbSet<vwDimModelRunOverallRisk> vwDimModelRunOverallRisk { get; set; }
+        public virtual DbSet<vwRunnableLookupRowDisplayValues> vwRunnableLookupRowDisplayValues { get; set; }
     }
 }

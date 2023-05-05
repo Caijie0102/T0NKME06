@@ -315,6 +315,25 @@
     <Property Name="UseFrlFrequencySourceDetection" Type="bit" Nullable="false" />
     <Property Name="RunOrder" Type="int" Nullable="false" />
   </EntityType>
+  <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'aa-formosa-prod-app-sqldb.dbo.vwDimModelRunOverallRisk' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+  <EntityType Name="vwDimModelRunOverallRisk">
+    <Key>
+      <PropertyRef Name="OrgTreeNodeModelRunId" />
+    </Key>
+    <Property Name="OrgTreeNodeModelRunId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="OverallRisk" Type="nvarchar(max)" />
+  </EntityType>
+  <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'aa-formosa-prod-app-sqldb.dbo.vwRunnableLookupRowDisplayValues' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+  <EntityType Name="vwRunnableLookupRowDisplayValues">
+    <Key>
+      <PropertyRef Name="LookupRowId" />
+    </Key>
+    <Property Name="LookupRowId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="DisplayValue" Type="nvarchar(max)" />
+    <Property Name="LookupRowIdString" Type="nvarchar" MaxLength="36" />
+  </EntityType>
   <Association Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
     <End Role="HierarchyTemplates" Type="Self.HierarchyTemplates" Multiplicity="0..1" />
     <End Role="ComponentDetails" Type="Self.ComponentDetails" Multiplicity="*" />
@@ -541,6 +560,19 @@
     <EntitySet Name="RiskMatrixProbabilityVectors" EntityType="Self.RiskMatrixProbabilityVectors" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RunnableLookupRowDisplayValues" EntityType="Self.RunnableLookupRowDisplayValues" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RunnableModel" EntityType="Self.RunnableModel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vwDimModelRunOverallRisk" EntityType="Self.vwDimModelRunOverallRisk" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [vwDimModelRunOverallRisk].[OrgTreeNodeModelRunId] AS [OrgTreeNodeModelRunId], 
+    [vwDimModelRunOverallRisk].[OverallRisk] AS [OverallRisk]
+    FROM [dbo].[vwDimModelRunOverallRisk] AS [vwDimModelRunOverallRisk]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vwRunnableLookupRowDisplayValues" EntityType="Self.vwRunnableLookupRowDisplayValues" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [vwRunnableLookupRowDisplayValues].[LookupRowId] AS [LookupRowId], 
+    [vwRunnableLookupRowDisplayValues].[DisplayValue] AS [DisplayValue], 
+    [vwRunnableLookupRowDisplayValues].[LookupRowIdString] AS [LookupRowIdString]
+    FROM [dbo].[vwRunnableLookupRowDisplayValues] AS [vwRunnableLookupRowDisplayValues]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId" Association="Self.FK_ComponentDetails_HierarchyTemplates_HierarchyTemplateId">
       <End Role="HierarchyTemplates" EntitySet="HierarchyTemplates" />
       <End Role="ComponentDetails" EntitySet="ComponentDetails" />

@@ -9,6 +9,12 @@ namespace T0NKME06.Models
 {
     public class T0NKME08model
     {
+        public string InspectionPlanTaskId38 { get; set; }
+        public string HeaderText { get; set; }
+        public string InspectionPlanTaskId { get; set; }
+        public string MitigationColumnId { get; set; }
+
+
         [Display(Name = "組織Id")]
         public string OrganisationId { get; set; }
         [Display(Name = "組織名稱")]
@@ -89,6 +95,7 @@ namespace T0NKME06.Models
         public string ManualLastInspectionDate { get; set; }
         [Display(Name = "檢測位置")]
         public string LOCATION { get; set; }
+        public string LOCATION2 { get; set; }
         [Display(Name = "可執行時機")]
         public string AVAILABILITY { get; set; }
         [Display(Name = "建議穿透保溫數量")]

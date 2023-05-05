@@ -1,27 +1,19 @@
-﻿using Newtonsoft.Json.Linq;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.Formula.PTG;
-using NPOI.XWPF.UserModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.WebPages;
-using T0NKME06.Extensions;
 using T0NKME06.Models;
-using static ICSharpCode.SharpZipLib.Zip.ExtendedUnixData;
+using System.Web.WebPages;
 
 namespace T0NKME06.Controllers
 {
-    public class T0NKME08Controller : ApiController
+    public class T0NKME0802Controller : ApiController
     {
-        // GET: T0NKME08
+        // GET: T0NKME0802
         public IHttpActionResult Get()
         {
             List<T0NKME08model> DataList_T0NKME08model = new List<T0NKME08model>();
@@ -33,21 +25,20 @@ namespace T0NKME06.Controllers
             {
                 using (Entities2 db = new Entities2())
                 {
-                    
 
-                    
+
+
 
                     var getAllComponent = from otmr in db.OrgTreeNodeModelRuns  //32
-                                          join otn in db.OrgTreeNodes on otmr.OrgTreeNodeId equals otn.OrgTreeNodeId //03
+                                          //join otn in db.OrgTreeNodes on otmr.OrgTreeNodeId equals otn.OrgTreeNodeId //03
                                           join ip in db.InspectionPlans on otmr.OrgTreeNodeModelRunId equals ip.OrgTreeNodeModelRunId  //09
-                                          
-
+                                         
                                           select new
                                           {
-                                              
-                                              OrgTreeNodeId32 = otn.OrgTreeNodeId.ToString(), //otmr與otn連接的
 
-                                              AssetDetailsId = otn.AssetDetailsId.ToString(),
+                                              OrgTreeNodeId = otmr.OrgTreeNodeId.ToString(), //otmr與otn連接的
+
+                                              //AssetDetailsId = otn.AssetDetailsId.ToString(),
 
                                              
                                               OrgTreeNodeModelRunId = otmr.OrgTreeNodeModelRunId.ToString(),
@@ -68,27 +59,28 @@ namespace T0NKME06.Controllers
                                               CreationDate09 = ip.CreationDate.ToString(),
                                               //09
                                               InspectionPlanStatus = ip.InspectionPlanStatus.ToString(),
-                                              
+
+
 
 
 
                                           };
-                   //  return Ok(getAllComponent.Take(100).ToList());
-                  
+                    //  return Ok(getAllComponent.Take(100).ToList());
 
-                    
+
+
 
                     var W0NKME03 = db.OrgTreeNodes.ToList();
 
                     var fake = getAllComponent
                   //.AsEnumerable() //19
-                  .Take(500);
+                  .Take(1000);
                     //.ToList(); // 将 LINQ 对象转换为列表对象
 
                     Parallel.ForEach(fake, item =>
                     {
                         //在這個迴圈中，程式碼使用Where方法從"W0NKME03"集合中過濾出元件（Components），以便獲取該元件的詳細資料，例如組織、位置、系統、設備、元件ID等。使用Select方法從過濾後的元件集合中，選擇需要的屬性來建立一個匿名物件，然後使用FirstOrDefault方法來取得第一個符合條件的元素，如果沒有符合條件的元素，則返回null。
-                        var getComponent = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId32.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
+                        var getComponent = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
                         if (getComponent != null)  //"x"則是指向"W0NKME03"集合的當前元素。
                         {
                             var getAssetitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getComponent.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
@@ -123,12 +115,8 @@ namespace T0NKME06.Controllers
                                                         AssetId = getAssetitem.OrgTreeNodeId.ToString(),
                                                         Asset = getAssetitem.Name,
 
-                                                        OrgTreeNodeModelRunId=item.OrgTreeNodeModelRunId.ToString(),
-                                                        InspectionPlanId = item.InspectionPlanId.ToString(), //09?
-                                                        CreatedBy09 = item.CreatedBy09.ToString(),
-                                                        CreationDate09 = item.CreationDate09.ToString(),
-                                                        InspectionPlanStatus = item.InspectionPlanStatus.ToString(),
-
+                                                        OrgTreeNodeModelRunId = item.OrgTreeNodeModelRunId.ToString(),
+                                                       
                                                         CreatedBy32 = item.CreatedBy32.ToString(),
                                                         CreationDate32 = item.CreationDate32.ToString(),
                                                         LastModifiedBy32 = item.LastModifiedBy32.ToString(),
@@ -138,8 +126,13 @@ namespace T0NKME06.Controllers
                                                         AnalysisDate = item.AnalysisDate.ToString(),
                                                         MassCriticalityRunId = item.MassCriticalityRunId.ToString(),
 
-                                                      //InspectionPlanTaskId = item.InspectionPlanTaskId.ToString(),
-                                                      //MitigationColumnId = item.MitigationColumnId.ToString(),
+                                                        InspectionPlanId = item.InspectionPlanId.ToString(), //09?
+                                                        CreatedBy09 = item.CreatedBy09.ToString(),
+                                                        CreationDate09 = item.CreationDate09.ToString(),
+                                                        InspectionPlanStatus = item.InspectionPlanStatus.ToString(),
+
+                                                        //InspectionPlanTaskId = item.InspectionPlanTaskId.ToString(),
+                                                        //MitigationColumnId = item.MitigationColumnId.ToString(),
 
 
 
@@ -162,113 +155,149 @@ namespace T0NKME06.Controllers
                     var W0NKME39 = db.InspectionPlanTaskMitigationColumns.ToList();
                     var W0NKME40 = db.MitigationColumns.ToList();
                     var W0NKME08 = db.Recommendations.ToList();
-                   
+
                     foreach (var need32 in DataList_T0NKME08model)
                     {
-                       
-
-                        var n38 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.InspectionPlanTaskId }).FirstOrDefault();
-
+                        var n38 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new {
+                            x.InspectionPlanTaskId,
+                            x.InspectionPlanId,
+                            x.CreatedBy,
+                            x.CreationDate,
+                            x.LastModifiedBy,
+                            x.LastModifiedDate,
+                            x.TaskExtent,
+                            x.TaskFrequency,
+                            x.TaskInterval,
+                            x.TaskName,
+                            x.TaskReference,
+                            x.MitigationType,
+                            x.DueDate,
+                            x.IsStaticDueDate,
+                            x.HistoricInspectionDate,
+                            x.MasterInspectionMethodId,
+                            x.ManualLastInspectionDate
+                        }).ToList();
 
                         var CreatedBy381 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreatedBy }).FirstOrDefault();
                         var CreationDate381 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreationDate }).FirstOrDefault();
                         var LastModifiedBy381 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.LastModifiedBy }).FirstOrDefault();
 
-                        var LastModifiedBy38 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreatedBy }).FirstOrDefault();
-                        var LastModifiedDate38 = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreationDate }).FirstOrDefault();
-                        var TaskExtent = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.LastModifiedBy }).FirstOrDefault();
-                        var TaskFrequency = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreatedBy }).FirstOrDefault();
-                        var TaskInterval = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreationDate }).FirstOrDefault();
-                        var TaskName = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.LastModifiedBy }).FirstOrDefault();
-                        
-                        var TaskReference = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreatedBy }).FirstOrDefault();
-                        var MitigationType = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreationDate }).FirstOrDefault();
-                        var DueDate = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.LastModifiedBy }).FirstOrDefault();
-                        var IsStaticDueDate = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreatedBy }).FirstOrDefault();
-                        var HistoricInspectionDate = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreationDate }).FirstOrDefault();
-                        var MasterInspectionMethodId = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.LastModifiedBy }).FirstOrDefault();
-                        var ManualLastInspectionDate = W0NKME38.Where(x => x.InspectionPlanId.ToString() == need32.InspectionPlanId.ToString()).Select(x => new { x.CreatedBy }).FirstOrDefault();
-                        
+                      
+                        var CreatedBy38 = n38.Select(x => x.CreatedBy).FirstOrDefault();
+                        need32.CreatedBy38 = CreatedBy38 ?? null;
 
-                        if (CreatedBy381 != null)
+                        var CreationDate38 = n38.Select(x => x.CreationDate).FirstOrDefault();
+                        if (CreationDate38 != null)
                         {
-                            need32.CreationDate38 = Convert.ToString(CreatedBy381);
+                            need32.CreationDate38 = Convert.ToString(CreationDate38);
                         }
-                        else 
+                        else
                         {
-                            need32.CreationDate38 = " ";
+                            need32.CreationDate38 = null;
                         }
 
-                        need32.CreationDate38 = CreationDate381 != null ? Convert.ToString(CreationDate381) : null;
-                        need32.LastModifiedBy38 = LastModifiedBy381 != null ? Convert.ToString(LastModifiedBy381) : null;
-                        need32.LastModifiedBy38 = LastModifiedBy38 != null ? Convert.ToString(LastModifiedBy38) : null;
-                        need32.LastModifiedDate38 = LastModifiedDate38 != null ? Convert.ToString(LastModifiedDate38) : null;
-                        need32.TaskExtent = TaskExtent != null ? Convert.ToString(TaskExtent) : null;
-                        need32.TaskFrequency = TaskFrequency != null ? Convert.ToString(TaskFrequency) : null;
-                        need32.TaskInterval = TaskInterval != null ? Convert.ToString(TaskInterval) : null;
-                        need32.TaskName = TaskName != null ? Convert.ToString(TaskName) : null;
 
-                        need32.TaskReference = TaskReference != null ? Convert.ToString(TaskReference) : null;
-                        need32.MitigationType = MitigationType != null ? Convert.ToString(MitigationType) : null;
-                        need32.DueDate = DueDate != null ? Convert.ToString(DueDate) : null;
-                        need32.IsStaticDueDate = IsStaticDueDate != null ? Convert.ToString(IsStaticDueDate) : null;
-                        need32.HistoricInspectionDate = HistoricInspectionDate != null ? Convert.ToString(HistoricInspectionDate) : null;
-                        need32.MasterInspectionMethodId = MasterInspectionMethodId != null ? Convert.ToString(MasterInspectionMethodId) : null;
-                        need32.ManualLastInspectionDate = ManualLastInspectionDate != null ? Convert.ToString(ManualLastInspectionDate) : null;
+                        var LastModifiedBy38 = n38.Select(x => x.LastModifiedBy).FirstOrDefault();
+                        need32.LastModifiedBy38 = LastModifiedBy38 ?? null;
+
+                        var LastModifiedDate38 = n38.Select(x => x.LastModifiedDate).FirstOrDefault();
+                        need32.LastModifiedDate38 = Convert.ToString(LastModifiedDate38) ?? null;
+
+                        var TaskExtent = n38.Select(x => x.TaskExtent).FirstOrDefault();
+                        need32.TaskExtent = TaskExtent ?? null;
+
+                        var TaskFrequency = n38.Select(x => x.TaskFrequency).FirstOrDefault();
+                        need32.TaskFrequency = Convert.ToString(TaskFrequency) ?? null;
+
+                        var TaskInterval = n38.Select(x => x.TaskInterval).FirstOrDefault();
+                        need32.TaskInterval = TaskInterval ?? null;
+
+                        var TaskName = n38.Select(x => x.TaskName).FirstOrDefault();
+                        need32.TaskName = TaskName ?? null;
+
+                        var TaskReference = n38.Select(x => x.TaskReference).FirstOrDefault();
+                        need32.TaskReference = TaskReference ?? null;
+
+                        var MitigationType = n38.Select(x => x.MitigationType).FirstOrDefault();
+                        need32.MitigationType = MitigationType ?? null;
+
+                        var DueDate = n38.Select(x => x.DueDate).FirstOrDefault();
+                        need32.DueDate = Convert.ToString(DueDate) ?? null;
+
+                        var IsStaticDueDate = n38.Select(x => x.IsStaticDueDate).FirstOrDefault();
+                        need32.IsStaticDueDate = Convert.ToString(IsStaticDueDate) ?? null;
 
 
+                        var HistoricInspectionDate = n38.Select(x => x.HistoricInspectionDate).FirstOrDefault();
+                        need32.HistoricInspectionDate = Convert.ToString(HistoricInspectionDate) ?? null;
 
+
+                        var MasterInspectionMethodId = n38.Select(x => x.MasterInspectionMethodId).FirstOrDefault();
+                        need32.MasterInspectionMethodId = Convert.ToString(MasterInspectionMethodId) ?? null;
+
+
+                        var ManualLastInspectionDate = n38.Select(x => x.ManualLastInspectionDate).FirstOrDefault();
+                        need32.ManualLastInspectionDate = Convert.ToString(ManualLastInspectionDate) ?? null;
 
 
                         //38-39
                         //39-40
-                        /**var n391 = W0NKME39.Where(x => x.InspectionPlanTaskId.ToString() == n38.InspectionPlanTaskId.ToString()).Select(x => new { x.InspectionPlanTaskId, x.MitigationColumnId, x.CellText }).ToList();
+                        var InspectionPlanTaskId38 = n38.Select(x => x.InspectionPlanTaskId).FirstOrDefault();
+                        need32.InspectionPlanTaskId38 = InspectionPlanTaskId38.ToString();
+
+                        var n391 = W0NKME39.Where(x =>  x.InspectionPlanTaskId.ToString()== InspectionPlanTaskId38.ToString()).Select(x => new { x.InspectionPlanTaskId, x.MitigationColumnId, x.CellText }).ToList();
                         var n401 = W0NKME40.Where(x => !x.HeaderText.IsEmpty() && x.HeaderText.ToString() == "LOCATION").Join(n391, x => x.MitigationColumnId.ToString(), n => n.MitigationColumnId.ToString(), (x, n) => new { n.CellText }).FirstOrDefault();
                         if (n401 != null) // 確認 n40 不為 null
                         {
-                            need32.LOCATION = n401.CellText; 
-                                                            
+                            need32.LOCATION = n401.CellText;
+
                         }
                         else
                         {
                             need32.LOCATION = null;
-                        }**/
-
-
-                        var celltext39 = W0NKME39.Where(x =>  x.InspectionPlanTaskId.ToString() == n38.InspectionPlanTaskId.ToString()).Select(x => new { x.CellText }).FirstOrDefault();
+                        }
 
                         
-                        var n39 = W0NKME39.Where(x => x.InspectionPlanTaskId.ToString() == n38.InspectionPlanTaskId.ToString()).Select(x => new { x.InspectionPlanTaskId, x.MitigationColumnId, x.CellText }).ToList();
+
+                        var celltext39 = W0NKME39.Where(x => x.InspectionPlanTaskId.ToString() == InspectionPlanTaskId38.ToString()).Select(x => new { x.CellText }).FirstOrDefault();
+
+
+                        var n39 = W0NKME39.Where(x => x.InspectionPlanTaskId.ToString() == InspectionPlanTaskId38.ToString()).Select(x => new { x.InspectionPlanTaskId, x.MitigationColumnId, x.CellText }).ToList();
                         var n40 = W0NKME40.Where(x => n39.Any(n => n.MitigationColumnId.ToString() == x.MitigationColumnId.ToString())).Select(x => new { x.HeaderText, x.MitigationColumnId }).ToList();
                         //need32.LOCATION2 = celltext39.CellText;
+                        
 
+                        
+                        
 
                         var AVAILABILITY = n40.Where(x => !x.HeaderText.IsEmpty() && x.HeaderText.ToString() == "AVAILABILITY").Select(x => new { x.MitigationColumnId }).FirstOrDefault();
                         if (AVAILABILITY != null)
                         {
-                            
+
                             need32.AVAILABILITY = celltext39.CellText;
                         }
                         else
                         {
+
                             need32.AVAILABILITY = null;
                         }
+                        
 
                         var NoBarrPenetrationsRdgs = n40.Where(x => !x.HeaderText.IsEmpty() && x.HeaderText.ToString() == "BARRIER PENETRATION").Select(x => new { x.MitigationColumnId }).FirstOrDefault();
                         if (NoBarrPenetrationsRdgs != null)
                         {
                             double a = Convert.ToDouble(celltext39.CellText);
-                            if (a >=0 && a <= 2)
+                            if (a >= 0 && a <= 2)
                             {
                                 need32.NoBarrPenetrationsRdgs = "2";
                             }
                             else
                             {
-                                double b= Math.Ceiling(a);
+                                double b = Math.Ceiling(a);
                                 need32.NoBarrPenetrationsRdgs = Convert.ToString(b);
                             }
-                            
-                        } 
+
+                        }
                         else
                         {
                             need32.NoBarrPenetrationsRdgs = null;
@@ -387,7 +416,7 @@ namespace T0NKME06.Controllers
                         {
                             need32.NoInsdTerminatorRdgs = null;
                         }
-                        
+
                         var NoLongHorizRdgs = n40.Where(x => !x.HeaderText.IsEmpty() && x.HeaderText.ToString() == "LONG HORIZONTAL RUNS").Select(x => new { x.MitigationColumnId }).FirstOrDefault();
                         if (NoLongHorizRdgs != null)
                         {
