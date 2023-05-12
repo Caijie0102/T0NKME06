@@ -184,11 +184,10 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\T0NKME0601Controller.cs" />
+    <Compile Include="Controllers\T0NKME0602Controller.cs" />
     <Compile Include="Controllers\T0NKME06Controller.cs" />
     <Compile Include="Controllers\T0NKME07Controller.cs" />
-    <Compile Include="Controllers\T0NKME0802Controller.cs" />
     <Compile Include="Controllers\T0NKME0803Controller.cs" />
-    <Compile Include="Controllers\T0NKME08Controller.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Extensions\ExcelExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -268,7 +267,6 @@
     </Compile>
     <Compile Include="Models\T0NKME06model.cs" />
     <Compile Include="Models\T0NKME07model.cs" />
-    <Compile Include="Models\T0NKME0801Controller.cs" />
     <Compile Include="Models\T0NKME08model.cs" />
     <Compile Include="Models\vwDimModelRunOverallRisk.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -360,7 +358,9 @@
     <Folder Include="Views\T0NKME0801\" />
     <Folder Include="Views\T0NKME0802\" />
     <Folder Include="Views\T0NKME0803\" />
+    <Folder Include="Views\T0NKME0804\" />
     <Folder Include="Views\T0NKME08\" />
+    <Folder Include="Views\TONKME0602\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

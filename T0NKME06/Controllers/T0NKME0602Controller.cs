@@ -10,12 +10,13 @@ using T0NKME06.Extensions;
 using T0NKME06.Models;
 using System.Web.WebPages;
 using System.Threading;
+using NPOI.SS.Formula.Functions;
 
 namespace T0NKME06.Controllers
-{
-    public class T0NKME0601Controller : ApiController
+{//02是錯的
+    public class T0NKME0602Controller : ApiController
     {
-        // GET: T0NKME0601
+        // GET: T0NKME0602
         public IHttpActionResult Get()
         {
             string start = (DateTime.Now.ToString("HH:mm ss tt"));
@@ -29,12 +30,12 @@ namespace T0NKME06.Controllers
             {
                 using (Entities2 db = new Entities2())
                 {
-                    
                     var getAllComponent = from otmr in db.OrgTreeNodeModelRuns  //32
-                                          join otn in db.OrgTreeNodes on otmr.OrgTreeNodeId equals otn.OrgTreeNodeId
+                                          join otn in db.OrgTreeNodes on otmr.OrgTreeNodeId equals otn.OrgTreeNodeId //03
+                                          //join ori in db.OrgTreeNodeModelRunInputs on otmr.OrgTreeNodeModelRunId equals ori.OrgTreeNodeModelRunId //24  不能用因為會資料數會重複
+                                          //join oro in db.OrgTreeNodeModelRunOutputs on otmr.OrgTreeNodeModelRunId equals oro.OrgTreeNodeModelRunId //25
                                           where otn.IsDeleted == false //3
-                                          //join rm in db.RunnableModel on otmr.ModelId equals rm.ModelId //37
-                                          //join dim in db.vwDimModelRunOverallRisk on otmr.OrgTreeNodeModelRunId equals dim.OrgTreeNodeModelRunId //36
+                                         
                                           select new
                                           {
                                               OrgTreeNodeModelRunId = otmr.OrgTreeNodeModelRunId,
@@ -51,8 +52,10 @@ namespace T0NKME06.Controllers
                                               OrgTreeNodeId32 = otmr.OrgTreeNodeId.ToString(), //otmr與otn連接的
                                               ParentId = otn.ParentId.ToString(),   //otn的
 
+                                              
 
-                                          };
+
+                };
                     //return Ok(getAllComponent.Take(100).ToList());
 
 
@@ -62,8 +65,10 @@ namespace T0NKME06.Controllers
 
                     var fake = getAllComponent
                   //.AsEnumerable() //19
-                  .Take(50);
+                  .Take(100);
                     //.ToList(); // 将 LINQ 对象转换为列表对象
+
+              
 
                     Parallel.ForEach(fake, item =>
 
@@ -83,7 +88,7 @@ namespace T0NKME06.Controllers
                         }
 
                         string OverallRiskString = ""; //36
-                        var OverallRisk = W0NKME36.Where(x => x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();
+                        var OverallRisk = W0NKME36.Where(x => x.OrgTreeNodeModelRunId != null && x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();
                         // var OverallRisk = db.vwDimModelRunOverallRisk.Where(x =>  x.OrgTreeNodeModelRunId.ToString() == item.OrgTreeNodeModelRunId.ToString()).Select(x => new { x.OverallRisk }).ToList();
                         if (OverallRisk != null)
                         {
@@ -94,10 +99,10 @@ namespace T0NKME06.Controllers
                         {
                             OverallRiskString = "";
                         }
-                        /**var getComponent = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId32.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
+                        var getComponent = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId32.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
                         if (getComponent != null)
-                        {*/
-                            var getAssetitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.OrgTreeNodeId32.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
+                        {
+                            var getAssetitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == item.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name, x.Description, x.InstallationDate }).FirstOrDefault();
                         if (getAssetitem != null)
                         {
                             var getSystemitem = W0NKME03.Where(x => x.OrgTreeNodeId.ToString() == getAssetitem.ParentId.ToString()).Select(x => new { x.OrgTreeNodeId, x.ParentId, x.Name }).FirstOrDefault();
@@ -145,6 +150,8 @@ namespace T0NKME06.Controllers
 
                                                     ModelId = item.ModelId.ToString(),
 
+                                                   
+
 
 
 
@@ -155,7 +162,7 @@ namespace T0NKME06.Controllers
                                 }
                             }
                         }
-                    //}
+                    }
 
 
 
@@ -182,39 +189,41 @@ namespace T0NKME06.Controllers
                     string m2 = (DateTime.Now.ToString("HH:mm ss tt"));
 
 
-
+                    string NodeInputId24 = ""; //24
+                    string Value24 = ""; //24
+                    string ModelNodeId = ""; //24
+                    string NodeOutputId25 = ""; //25
+                    string Value25 = ""; //25
 
                     //32-24/24-31/24-29
 
                     Parallel.ForEach(DataList_T0NKME06model, need24 => //foreach (var need24 in DataList_T0NKME06model)
                     {
-                    string JacketedFlag = " ", IntEntryPossFlag = " ", InjectionPointFlag = " ", MixedBoreFlag = " ", SmallBoreFlag = " ", NoBarrPenetrations = " ", NoDmgdInsd = " ", NoDeadLegs = " ", NoElbows = " ", NoErosionZones = " ", NoHorizLowPts = " ", NoInsdTerminators = " ", NoLongHorizRuns = " ", NoReducers = " ", NoSoilToAirIntfs = " ", NoTees = " ", NoVertRuns = " ",
-                DetectionTime = " ", IsolationTime = " ", DikedFlag = " ", RepFluid = " ", ProductionLoss = " ", PercentToxic = " ", ToxicFluid = " ", ToxicMixtureFlag = " ",
-                EnvCrckgInspConf = " ", EnvCrckgLastInspDate = " ", EnvCrckgNoOfInsp = " ", EnvCrckgServDate = " ", EnvCrckgMech = " ",
-                Humidity = " ", ExtWettingFlag = " ", ExtCorrosionOption = " ", ExtServDate = " ", CUIFlag = " ", ExtInspConf = " ", ExtLastInspDate = " ", ExtNoOfInsp = " ", ExtCoating = " ", InsdFlag = " ", InsdCond = " ", InsdType = " ",
-                 FluidType = " ",
-                IntCorrosionType = " ", IntCorrosionOption = " ", CompType = " ", IntServDate = " ", ODOverrideFlag = " ", AnalysisDate = " ", IntInpsConf = " ", IntLastInspDate = " ", IntNoOfInps = " ", ConstCode = " ", JointEfficiency = " ", OverideAllowableStressFlag = " ", EstMinThicknessFlag = " ",
-                ODM1 = " ", ODM2 = " ", ODM3 = " ", ODM4 = " ", ODM5 = " ", ODM1Potential = " ", ODM2Potential = " ", ODM3Potential = " ", ODM4Potential = " ", ODM5Potential = " ", ODM1Probability = " ", ODM2Probability = " ", ODM3Probability = " ", ODM4Probability = " ", ODM5Probability = " ", ODM1Comment = " ", ODM2Comment = " ", ODM3Comment = " ", ODM4Comment = " ", ODM5Comment = " ", EstHalfLife = " ";
+                        string JacketedFlag = " ", IntEntryPossFlag = " ", InjectionPointFlag = " ", MixedBoreFlag = " ", SmallBoreFlag = " ", NoBarrPenetrations = " ", NoDmgdInsd = " ", NoDeadLegs = " ", NoElbows = " ", NoErosionZones = " ", NoHorizLowPts = " ", NoInsdTerminators = " ", NoLongHorizRuns = " ", NoReducers = " ", NoSoilToAirIntfs = " ", NoTees = " ", NoVertRuns = " ",
+                    DetectionTime = " ", IsolationTime = " ", DikedFlag = " ", RepFluid = " ", ProductionLoss = " ", PercentToxic = " ", ToxicFluid = " ", ToxicMixtureFlag = " ",
+                    EnvCrckgInspConf = " ", EnvCrckgLastInspDate = " ", EnvCrckgNoOfInsp = " ", EnvCrckgServDate = " ", EnvCrckgMech = " ",
+                    Humidity = " ", ExtWettingFlag = " ", ExtCorrosionOption = " ", ExtServDate = " ", CUIFlag = " ", ExtInspConf = " ", ExtLastInspDate = " ", ExtNoOfInsp = " ", ExtCoating = " ", InsdFlag = " ", InsdCond = " ", InsdType = " ",
+                     FluidType = " ",
+                    IntCorrosionType = " ", IntCorrosionOption = " ", CompType = " ", IntServDate = " ", ODOverrideFlag = " ", AnalysisDate = " ", IntInpsConf = " ", IntLastInspDate = " ", IntNoOfInps = " ", ConstCode = " ", JointEfficiency = " ", OverideAllowableStressFlag = " ", EstMinThicknessFlag = " ",
+                    ODM1 = " ", ODM2 = " ", ODM3 = " ", ODM4 = " ", ODM5 = " ", ODM1Potential = " ", ODM2Potential = " ", ODM3Potential = " ", ODM4Potential = " ", ODM5Potential = " ", ODM1Probability = " ", ODM2Probability = " ", ODM3Probability = " ", ODM4Probability = " ", ODM5Probability = " ", ODM1Comment = " ", ODM2Comment = " ", ODM3Comment = " ", ODM4Comment = " ", ODM5Comment = " ", EstHalfLife = " ";
 
-                    double DikeArea = 0, Inventory = 0, OpernTemp = 0, OpernPress = 0, RepThick = 0, ExtExpecedCorrRate = 0, ExtMeasuredCorrRate = 0, IntExpectedCorrRate = 0, IntLTCorrRate = 0, IntSTCorrRate = 0, DesignPressure = 0, DesignTemp = 0, Diameter = 0, ODOverride = 0, OverideAllowableStress = 0, ExtCalcCorrRate = 0, EstMinThickness = 0, IntEstWallRemain = 0, OperatingTemperature = 0,
-                        AIT = 0, BoilingPoint = 0, ToxicBP = 0;
-                       
+                        double DikeArea = 0, Inventory = 0, OpernTemp = 0, OpernPress = 0, RepThick = 0, ExtExpecedCorrRate = 0, ExtMeasuredCorrRate = 0, IntExpectedCorrRate = 0, IntLTCorrRate = 0, IntSTCorrRate = 0, DesignPressure = 0, DesignTemp = 0, Diameter = 0, ODOverride = 0, OverideAllowableStress = 0, ExtCalcCorrRate = 0, EstMinThickness = 0, IntEstWallRemain = 0, OperatingTemperature = 0,
+                            AIT = 0, BoilingPoint = 0, ToxicBP = 0;
 
-                    if (need24.OrgTreeNodeModelRunId != null)
-                    {
-                     var get241 = db.OrgTreeNodeModelRunInputs.Where(x => x.OrgTreeNodeModelRunId != null && x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).Select(x => new { x.NodeInputId,x.Value,x.ModelNodeId }).ToList();//32-24
 
-                        //var get251 = db.OrgTreeNodeModelRunOutputs.Where(x => x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).ToList();//32-25
-
-                        Parallel.ForEach(get241, get24 =>
+                        if (need24.OrgTreeNodeModelRunId != null)
                         {
-                            
-                            
-                            //31 
-                            //
+                            //var get24 = db.OrgTreeNodeModelRunInputs.Where(x => x.OrgTreeNodeModelRunId != null && x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();//32-24
 
-                            var get31 = W0NKME31.Where(x => x.NodeInputId.ToString() == get24.NodeInputId.ToString()).Select(x => new { x.GroupName, x.Label, get24.Value, x.NodeInputId }).ToList(); //24-31
-                            //var get30 = W0NKME30.Where(x => x.NodeOutputId.ToString() == get25.NodeOutputId.ToString()).Select(x => new { x.GroupName, x.Label, get25.Value, x.NodeOutputId }).ToList(); //25-30
+                            //var get25 = db.OrgTreeNodeModelRunOutputs.Where(x => x.OrgTreeNodeModelRunId.ToString() == need24.OrgTreeNodeModelRunId.ToString()).FirstOrDefault();//32-25
+
+
+
+
+                            //31
+
+                            var get31 = W0NKME31.Where(x => x.NodeInputId.ToString() == NodeInputId24.ToString()).Select(x => new { x.GroupName, x.Label, Value24, x.NodeInputId }).ToList(); //24-31
+                            var get30 = W0NKME30.Where(x => x.NodeOutputId.ToString() == NodeOutputId25.ToString()).Select(x => new { x.GroupName, x.Label, Value25, x.NodeOutputId }).ToList(); //25-30
 
 
                             //29
@@ -222,18 +231,18 @@ namespace T0NKME06.Controllers
                             //var get2529 = W0NKME29.Where(x => x.ModelNodeId.ToString() == get25.ModelNodeId.ToString()).Select(x => new {  x.NodeLabel }).ToList(); //25-29
 
                             //24-26/27/28
-                            var DisplayValue = W0NKME26.Where(x => !get24.Value.IsEmpty() && x.LookupRowId.ToString() == get24.Value.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
-                            var ProbabilityLabel = W0NKME27.Where(x => !get24.Value.IsEmpty() && x.Index.ToString() == get24.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
-                            var ConsequenceLabel = W0NKME28.Where(x => !get24.Value.IsEmpty() && x.Index.ToString() == get24.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                            var DisplayValue = W0NKME26.Where(x => !need24.Value.IsEmpty() && x.LookupRowId.ToString() == Value24.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
+                            var ProbabilityLabel = W0NKME27.Where(x => !need24.Value.IsEmpty() && x.Index.ToString() == Value24.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                            var ConsequenceLabel = W0NKME28.Where(x => !need24.Value.IsEmpty() && x.Index.ToString() == Value24.ToString()).Select(x => new { x.Label }).FirstOrDefault();
                             //
                             //
-                            //           var DisplayValue25 = W0NKME26.Where(x => !get25.Value.IsEmpty() && x.LookupRowId.ToString() == get25.Value.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
-                            //           var ProbabilityLabel25 = W0NKME27.Where(x => !get25.Value.IsEmpty() && x.Index.ToString() == get25.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
-                            //           var ConsequenceLabel25 = W0NKME28.Where(x => !get25.Value.IsEmpty() && x.Index.ToString() == get25.Value.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                            var DisplayValue25 = W0NKME26.Where(x => !need24.Value25.IsEmpty() && x.LookupRowId.ToString() == Value25.ToString()).Select(x => new { x.DisplayValue }).FirstOrDefault();
+                            var ProbabilityLabel25 = W0NKME27.Where(x => !need24.Value25.IsEmpty() && x.Index.ToString() == Value25.ToString()).Select(x => new { x.Label }).FirstOrDefault();
+                            var ConsequenceLabel25 = W0NKME28.Where(x => !need24.Value25.IsEmpty() && x.Index.ToString() == Value25.ToString()).Select(x => new { x.Label }).FirstOrDefault();
 
 
 
-                            switch (W0NKME29.Where(x => x.ModelNodeId.ToString() == get24.ModelNodeId.ToString()).FirstOrDefault().NodeLabel) //24==29
+                            switch (W0NKME29.Where(x => x.ModelNodeId.ToString() == ModelNodeId.ToString()).FirstOrDefault().NodeLabel) //24==29
                             {
                                 case "ADDITIONAL INFORMATION":
                                     var getJacketedFlag = get31.Where(x => x.GroupName.ToString() == "Other Data" && x.Label.ToString().Contains("Jacket")).FirstOrDefault();
@@ -251,7 +260,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getJacketedFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        JacketedFlag = get24.Value;
+                                        JacketedFlag = need24.Value;
                                     }
                                     else
                                     {
@@ -273,7 +282,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getIntEntryPossFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            IntEntryPossFlag = get24.Value;
+                                            IntEntryPossFlag = need24.Value;
                                         }
                                         else
                                         {
@@ -294,7 +303,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getInjectionPointFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                InjectionPointFlag = get24.Value;
+                                                InjectionPointFlag = need24.Value;
                                             }
                                             else
                                             {
@@ -313,7 +322,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else if (getMixedBoreFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                 {
-                                                    MixedBoreFlag = get24.Value;
+                                                    MixedBoreFlag = need24.Value;
                                                 }
                                                 else
                                                 {
@@ -333,7 +342,7 @@ namespace T0NKME06.Controllers
                                                     }
                                                     else if (getSmallBoreFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        SmallBoreFlag = get24.Value;
+                                                        SmallBoreFlag = need24.Value;
                                                     }
                                                     else
                                                     {
@@ -353,7 +362,7 @@ namespace T0NKME06.Controllers
                                                         }
                                                         else if (getNoBarrPenetrations != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            NoBarrPenetrations = get24.Value;
+                                                            NoBarrPenetrations = need24.Value;
                                                         }
                                                         else
                                                         {
@@ -373,7 +382,7 @@ namespace T0NKME06.Controllers
                                                             }
                                                             else if (getNoDmgdInsd != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                             {
-                                                                NoDmgdInsd = get24.Value;
+                                                                NoDmgdInsd = need24.Value;
                                                             }
                                                             else
                                                             {
@@ -393,7 +402,7 @@ namespace T0NKME06.Controllers
                                                                 }
                                                                 else if (getNoDeadLegs != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                 {
-                                                                    NoDeadLegs = get24.Value;
+                                                                    NoDeadLegs = need24.Value;
                                                                 }
                                                                 else
                                                                 {
@@ -413,7 +422,7 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                     else if (getNoElbows != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                     {
-                                                                        NoElbows = get24.Value;
+                                                                        NoElbows = need24.Value;
                                                                     }
                                                                     else
                                                                     {
@@ -433,7 +442,7 @@ namespace T0NKME06.Controllers
                                                                         }
                                                                         else if (getNoErosionZones != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            NoErosionZones = get24.Value;
+                                                                            NoErosionZones = need24.Value;
                                                                         }
                                                                         else
                                                                         {
@@ -453,7 +462,7 @@ namespace T0NKME06.Controllers
                                                                             }
                                                                             else if (getNoHorizLowPts != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                NoHorizLowPts = get24.Value;
+                                                                                NoHorizLowPts = need24.Value;
                                                                             }
                                                                             else
                                                                             {
@@ -473,7 +482,7 @@ namespace T0NKME06.Controllers
                                                                                 }
                                                                                 else if (getNoInsdTerminators != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    NoInsdTerminators = get24.Value;
+                                                                                    NoInsdTerminators = need24.Value;
                                                                                 }
                                                                                 else
                                                                                 {
@@ -493,7 +502,7 @@ namespace T0NKME06.Controllers
                                                                                     }
                                                                                     else if (getNoLongHorizRuns != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                     {
-                                                                                        NoLongHorizRuns = get24.Value;
+                                                                                        NoLongHorizRuns = need24.Value;
                                                                                     }
                                                                                     else
                                                                                     {
@@ -513,7 +522,7 @@ namespace T0NKME06.Controllers
                                                                                         }
                                                                                         else if (getNoReducers != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                         {
-                                                                                            NoReducers = get24.Value;
+                                                                                            NoReducers = need24.Value;
                                                                                         }
                                                                                         else
                                                                                         {
@@ -533,13 +542,13 @@ namespace T0NKME06.Controllers
                                                                                             }
                                                                                             else if (getNoSoilToAirIntfs != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                             {
-                                                                                                NoSoilToAirIntfs = get24.Value;
+                                                                                                NoSoilToAirIntfs = need24.Value;
                                                                                             }
                                                                                             else
                                                                                             {
                                                                                                 var getNoTees = get31.Where(x => x.GroupName.ToString() == "Pipe Locations"
                                                                                                          && x.Label.ToString() == "Number of Tees").FirstOrDefault();//其實應該要24
-                                                                                                if (getNoTees != null && DisplayValue != null)
+                                                                                                if (getNoTees != null && need24.DisplayValue != null)
                                                                                                 {
                                                                                                     NoTees = DisplayValue.DisplayValue;
                                                                                                 }
@@ -553,7 +562,7 @@ namespace T0NKME06.Controllers
                                                                                                 }
                                                                                                 else if (getNoTees != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                 {
-                                                                                                    NoTees = get24.Value;
+                                                                                                    NoTees = need24.Value;
                                                                                                 }
                                                                                                 else
                                                                                                 {
@@ -573,7 +582,7 @@ namespace T0NKME06.Controllers
                                                                                                     }
                                                                                                     else
                                                                                                     {
-                                                                                                        NoVertRuns = get24.Value;
+                                                                                                        NoVertRuns = need24.Value;
                                                                                                     }
 
                                                                                                 }
@@ -618,7 +627,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getDetectionTime != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        DetectionTime = get24.Value;
+                                        DetectionTime = need24.Value;
                                     }
                                     else
                                     {
@@ -638,7 +647,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getIsolationTime != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            IsolationTime = get24.Value;
+                                            IsolationTime = need24.Value;
                                         }
                                         else
                                         {
@@ -662,7 +671,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getDikeArea != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                DikeArea = Convert.ToDouble(get24.Value) * 10.7639;
+                                                DikeArea = Convert.ToDouble(need24.Value) * 10.7639;
 
                                             }
                                             else
@@ -683,7 +692,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else if (getDikedFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                 {
-                                                    DikedFlag = get24.Value;
+                                                    DikedFlag = need24.Value;
                                                 }
                                                 else
                                                 {
@@ -705,7 +714,7 @@ namespace T0NKME06.Controllers
                                                     }
                                                     else if (getInventory != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        Inventory = Convert.ToDouble(get24.Value) * 0.45359237;
+                                                        Inventory = Convert.ToDouble(need24.Value) * 0.45359237;
 
                                                     }
                                                     else
@@ -729,7 +738,7 @@ namespace T0NKME06.Controllers
                                                         }
                                                         else if (getOperatingPressure != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            OpernPress = Convert.ToDouble(get24.Value) * 0.0689476;
+                                                            OpernPress = Convert.ToDouble(need24.Value) * 0.0689476;
 
                                                         }
                                                         else
@@ -755,7 +764,7 @@ namespace T0NKME06.Controllers
                                                             }
                                                             else if (getOperatingTemp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                             {
-                                                                var OperatingTemp1 = Convert.ToDouble(get24.Value);
+                                                                var OperatingTemp1 = Convert.ToDouble(need24.Value);
                                                                 OpernTemp = ((OperatingTemp1 - 32) * 5) / 9;
 
                                                             }
@@ -777,7 +786,7 @@ namespace T0NKME06.Controllers
                                                                 }
                                                                 else if (getRepFluid != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                 {
-                                                                    RepFluid = get24.Value;
+                                                                    RepFluid = need24.Value;
                                                                 }
                                                                 else
                                                                 {
@@ -797,7 +806,7 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                     else if (getProductionLoss != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                     {
-                                                                        ProductionLoss = get24.Value;
+                                                                        ProductionLoss = need24.Value;
                                                                     }
                                                                     else
                                                                     {
@@ -817,7 +826,7 @@ namespace T0NKME06.Controllers
                                                                         }
                                                                         else if (getPercentToxic != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            PercentToxic = get24.Value;
+                                                                            PercentToxic = need24.Value;
                                                                         }
                                                                         else
                                                                         {
@@ -837,7 +846,7 @@ namespace T0NKME06.Controllers
                                                                             }
                                                                             else if (getToxicFluid != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                ToxicFluid = get24.Value;
+                                                                                ToxicFluid = need24.Value;
                                                                             }
                                                                             else
                                                                             {
@@ -858,7 +867,7 @@ namespace T0NKME06.Controllers
 
                                                                                 else if (getToxicMixtureFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    ToxicMixtureFlag = get24.Value;
+                                                                                    ToxicMixtureFlag = need24.Value;
                                                                                 }
                                                                             }
                                                                         }
@@ -891,7 +900,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getEnvCrckgInspConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        EnvCrckgInspConf = get24.Value;
+                                        EnvCrckgInspConf = need24.Value;
                                     }
                                     else
                                     {
@@ -911,7 +920,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getEnvCrckgLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            EnvCrckgLastInspDate = get24.Value;
+                                            EnvCrckgLastInspDate = need24.Value;
                                         }
                                         else
                                         {
@@ -933,7 +942,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getEnvCrckgServDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                EnvCrckgServDate = get24.Value;
+                                                EnvCrckgServDate = need24.Value;
                                             }
                                             else
                                             {
@@ -953,7 +962,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else if (getEnvCrckgMech != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                 {
-                                                    EnvCrckgMech = get24.Value;
+                                                    EnvCrckgMech = need24.Value;
                                                 }
                                                 else
                                                 {
@@ -974,7 +983,7 @@ namespace T0NKME06.Controllers
                                                     }
                                                     else if (getEnvCrckgNoOfInsp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        EnvCrckgNoOfInsp = get24.Value;
+                                                        EnvCrckgNoOfInsp = need24.Value;
                                                     }
                                                 }
 
@@ -1003,7 +1012,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getHumidity != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        Humidity = get24.Value;
+                                        Humidity = need24.Value;
                                     }
                                     else
                                     {
@@ -1023,7 +1032,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getExtWettingFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            ExtWettingFlag = get24.Value;
+                                            ExtWettingFlag = need24.Value;
                                         }
                                         else
                                         {
@@ -1044,7 +1053,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getExtCorrosionOption != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                ExtCorrosionOption = get24.Value;
+                                                ExtCorrosionOption = need24.Value;
                                             }
                                             else
                                             {
@@ -1067,7 +1076,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else if (getExtExpecedCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                 {
-                                                    ExtExpecedCorrRate = Convert.ToDouble(get24.Value) * 25.4;
+                                                    ExtExpecedCorrRate = Convert.ToDouble(need24.Value) * 25.4;
 
                                                 }
                                                 else
@@ -1088,7 +1097,7 @@ namespace T0NKME06.Controllers
                                                     }
                                                     else if (getExtMeasuredCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        ExtMeasuredCorrRate = Convert.ToDouble(get24.Value) * 25.4;
+                                                        ExtMeasuredCorrRate = Convert.ToDouble(need24.Value) * 25.4;
                                                     }
                                                     else
                                                     {
@@ -1108,7 +1117,7 @@ namespace T0NKME06.Controllers
                                                         }
                                                         else if (getExtServDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            ExtServDate = get24.Value;
+                                                            ExtServDate = need24.Value;
                                                         }
 
 
@@ -1130,7 +1139,7 @@ namespace T0NKME06.Controllers
                                                             }
                                                             else if (getCUIFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                             {
-                                                                CUIFlag = get24.Value;
+                                                                CUIFlag = need24.Value;
                                                             }
                                                             else
                                                             {
@@ -1150,7 +1159,7 @@ namespace T0NKME06.Controllers
                                                                 }
                                                                 else if (getExtInspConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                 {
-                                                                    ExtInspConf = get24.Value;
+                                                                    ExtInspConf = need24.Value;
                                                                 }
                                                                 else
                                                                 {
@@ -1170,7 +1179,7 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                     else if (getExtLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                     {
-                                                                        ExtLastInspDate = get24.Value;
+                                                                        ExtLastInspDate = need24.Value;
                                                                     }
                                                                     else
                                                                     {
@@ -1190,7 +1199,7 @@ namespace T0NKME06.Controllers
                                                                         }
                                                                         else if (getExtNoOfInsp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            ExtNoOfInsp = get24.Value;
+                                                                            ExtNoOfInsp = need24.Value;
                                                                         }
                                                                         else
                                                                         {
@@ -1210,7 +1219,7 @@ namespace T0NKME06.Controllers
                                                                             }
                                                                             else if (getExtCoating != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                ExtCoating = get24.Value;
+                                                                                ExtCoating = need24.Value;
                                                                             }
                                                                             else
                                                                             {
@@ -1230,7 +1239,7 @@ namespace T0NKME06.Controllers
                                                                                 }
                                                                                 else if (getInsulatedFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    InsdFlag = get24.Value;
+                                                                                    InsdFlag = need24.Value;
                                                                                 }
                                                                                 else
                                                                                 {
@@ -1250,7 +1259,7 @@ namespace T0NKME06.Controllers
                                                                                     }
                                                                                     else if (getInsulationCondition != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                     {
-                                                                                        InsdCond = get24.Value;
+                                                                                        InsdCond = need24.Value;
                                                                                     }
                                                                                     else
                                                                                     {
@@ -1270,11 +1279,11 @@ namespace T0NKME06.Controllers
                                                                                         }
                                                                                         else if (getInsulationType != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                         {
-                                                                                            InsdType = get24.Value;
+                                                                                            InsdType = need24.Value;
                                                                                         }
-                                                                                        /**else
+                                                                                        else
                                                                                         { //!!!!超級奇怪
-                                                                                           var getExtCalcCorrRate = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
+                                                                                            var getExtCalcCorrRate = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Corrosion Information"
                                                                                             && x.Label.ToString() == "Calculated Corrosion Rate").FirstOrDefault();//其實應該要24
                                                                                             if (getExtCalcCorrRate != null && DisplayValue25 != null)
                                                                                             {
@@ -1300,7 +1309,7 @@ namespace T0NKME06.Controllers
                                                                                             }
                                                                                             //用30的不是31的 var ExtCalcCorrRate = getAllComponent.Where(x => x.NodeLabel.ToString() == "EXTERNAL CORROSION" && x.GroupName.ToString() == "Corrosion Information"
                                                                                             //&& x.Label.ToString() == "Corrosion Option").Select(x => new { x.Value }).FirstOrDefault();
-                                                                                        }**/
+                                                                                        }
 
                                                                                     }
                                                                                 }
@@ -1347,7 +1356,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getAIT != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        var AIT1 = Convert.ToDouble(get24.Value);
+                                        var AIT1 = Convert.ToDouble(need24.Value);
                                         AIT = ((AIT1 - 32) * 5) / 9;
                                     }
                                     else
@@ -1377,7 +1386,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getBoilingPoint != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            var BoilingPoint1 = Convert.ToDouble(get24.Value);
+                                            var BoilingPoint1 = Convert.ToDouble(need24.Value);
                                             BoilingPoint = ((BoilingPoint1 - 32) * 5) / 9;
 
 
@@ -1401,7 +1410,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getFluidType != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                FluidType = get24.Value;
+                                                FluidType = need24.Value;
                                             }
                                             else
                                             {
@@ -1466,7 +1475,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getIntCorrosionType != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        IntCorrosionType = get24.Value;
+                                        IntCorrosionType = need24.Value;
                                     }
                                     else
                                     {
@@ -1486,7 +1495,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getIntCorrosionOption != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            IntCorrosionOption = get24.Value;
+                                            IntCorrosionOption = need24.Value;
                                         }
                                         else
                                         {
@@ -1510,7 +1519,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getIntExpectedCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                IntExpectedCorrRate = Convert.ToDouble(get24.Value) * 25.4;
+                                                IntExpectedCorrRate = Convert.ToDouble(need24.Value) * 25.4;
 
                                             }
                                             else
@@ -1534,7 +1543,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else if (getIntLTCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                 {
-                                                    IntLTCorrRate = Convert.ToDouble(get24.Value) * 25.4;
+                                                    IntLTCorrRate = Convert.ToDouble(need24.Value) * 25.4;
 
                                                 }
                                                 else
@@ -1558,7 +1567,7 @@ namespace T0NKME06.Controllers
                                                     }
                                                     else if (getIntSTCorrRate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        IntSTCorrRate = Convert.ToDouble(get24.Value) * 25.4;
+                                                        IntSTCorrRate = Convert.ToDouble(need24.Value) * 25.4;
 
                                                     }
                                                     else
@@ -1579,7 +1588,7 @@ namespace T0NKME06.Controllers
                                                         }
                                                         else if (getCompType != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            CompType = get24.Value;
+                                                            CompType = need24.Value;
                                                         }
                                                         else
                                                         {
@@ -1602,7 +1611,7 @@ namespace T0NKME06.Controllers
                                                             }
                                                             else if (getDesignPressure != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                             {
-                                                                DesignPressure = Convert.ToDouble(get24.Value) * 25.4;
+                                                                DesignPressure = Convert.ToDouble(need24.Value) * 25.4;
 
                                                             }
                                                             else
@@ -1634,7 +1643,7 @@ namespace T0NKME06.Controllers
                                                                 }
                                                                 else if (getDesignTemp != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                 {
-                                                                    var DesignTemp1 = Convert.ToDouble(get24.Value);
+                                                                    var DesignTemp1 = Convert.ToDouble(need24.Value);
                                                                     DesignTemp = ((DesignTemp1 - 32) * 5) / 9;
 
 
@@ -1661,7 +1670,7 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                     else if (getDiameter != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                     {
-                                                                        Diameter = Convert.ToDouble(get24.Value) * 25.4;
+                                                                        Diameter = Convert.ToDouble(need24.Value) * 25.4;
 
                                                                     }
                                                                     else
@@ -1682,7 +1691,7 @@ namespace T0NKME06.Controllers
                                                                         }
                                                                         else if (getIntServDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            IntServDate = get24.Value;
+                                                                            IntServDate = need24.Value;
                                                                         }
                                                                         else
                                                                         {
@@ -1705,7 +1714,7 @@ namespace T0NKME06.Controllers
                                                                             }
                                                                             else if (getODOverride != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                ODOverride = Convert.ToDouble(get24.Value) * 25.4;
+                                                                                ODOverride = Convert.ToDouble(need24.Value) * 25.4;
 
                                                                             }
                                                                             else
@@ -1726,7 +1735,7 @@ namespace T0NKME06.Controllers
                                                                                 }
                                                                                 else if (getODOverrideFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    ODOverrideFlag = get24.Value;
+                                                                                    ODOverrideFlag = need24.Value;
                                                                                 }
                                                                                 else
                                                                                 {
@@ -1746,7 +1755,7 @@ namespace T0NKME06.Controllers
                                                                                     }
                                                                                     else if (getAnalysisDate != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                     {
-                                                                                        AnalysisDate = get24.Value;
+                                                                                        AnalysisDate = need24.Value;
                                                                                     }
                                                                                     else
                                                                                     {
@@ -1766,7 +1775,7 @@ namespace T0NKME06.Controllers
                                                                                         }
                                                                                         else if (getIntInpsConf != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                         {
-                                                                                            IntInpsConf = get24.Value;
+                                                                                            IntInpsConf = need24.Value;
                                                                                         }
                                                                                         else
                                                                                         {
@@ -1786,7 +1795,7 @@ namespace T0NKME06.Controllers
                                                                                             }
                                                                                             else if (getIntLastInspDate != null && DisplayValue == null && ProbabilityLabel == null && need24.ConsequenceLabel == null)
                                                                                             {
-                                                                                                IntLastInspDate = get24.Value;
+                                                                                                IntLastInspDate = need24.Value;
                                                                                             }
                                                                                             else
                                                                                             {
@@ -1806,7 +1815,7 @@ namespace T0NKME06.Controllers
                                                                                                 }
                                                                                                 else if (getIntNoOfInps != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                 {
-                                                                                                    IntNoOfInps = get24.Value;
+                                                                                                    IntNoOfInps = need24.Value;
                                                                                                 }
                                                                                                 else
                                                                                                 {
@@ -1826,7 +1835,7 @@ namespace T0NKME06.Controllers
                                                                                                     }
                                                                                                     else if (getConstCode != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                     {
-                                                                                                        ConstCode = get24.Value;
+                                                                                                        ConstCode = need24.Value;
                                                                                                     }
                                                                                                     else
                                                                                                     {
@@ -1846,7 +1855,7 @@ namespace T0NKME06.Controllers
                                                                                                         }
                                                                                                         else if (getJointEfficiency != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                         {
-                                                                                                            JointEfficiency = get24.Value;
+                                                                                                            JointEfficiency = need24.Value;
                                                                                                         }
                                                                                                         else
                                                                                                         {
@@ -1869,7 +1878,7 @@ namespace T0NKME06.Controllers
                                                                                                             }
                                                                                                             else if (getOverideAllowableStress != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                             {
-                                                                                                                OverideAllowableStress = Convert.ToDouble(get24.Value) * 0.0689476;
+                                                                                                                OverideAllowableStress = Convert.ToDouble(need24.Value) * 0.0689476;
 
                                                                                                             }
                                                                                                             else
@@ -1890,7 +1899,7 @@ namespace T0NKME06.Controllers
                                                                                                                 }
                                                                                                                 else if (getOverideAllowableStressFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                                 {
-                                                                                                                    OverideAllowableStressFlag = get24.Value;
+                                                                                                                    OverideAllowableStressFlag = need24.Value;
                                                                                                                 }
                                                                                                                 else
                                                                                                                 {
@@ -1911,10 +1920,71 @@ namespace T0NKME06.Controllers
 
                                                                                                                     else if (getEstMinThicknessFlag != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                                     {
-                                                                                                                        EstMinThicknessFlag = get24.Value;
+                                                                                                                        EstMinThicknessFlag = need24.Value;
                                                                                                                     }
-                                                                                                              
-                                                                                                                                
+                                                                                                                    else
+                                                                                                                    {
+                                                                                                                        var getEstMinThickness = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
+                                                                      && x.Label.ToString() == "Est. Min. Thickness").FirstOrDefault();
+                                                                                                                        if (getEstMinThicknessFlag != null && DisplayValue25 != null)
+                                                                                                                        {
+                                                                                                                            EstMinThickness = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
+                                                                                                                        }
+                                                                                                                        else if (getEstMinThickness != null && ProbabilityLabel25 != null)
+                                                                                                                        {
+                                                                                                                            EstMinThickness = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
+                                                                                                                        }
+                                                                                                                        else if (getEstMinThickness != null && ConsequenceLabel25 != null)
+                                                                                                                        {
+                                                                                                                            EstMinThickness = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
+                                                                                                                        }
+
+                                                                                                                        else if (getEstMinThickness != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                                        {
+                                                                                                                            EstMinThickness = Convert.ToDouble(need24.Value25) * 25.4;
+                                                                                                                        }
+                                                                                                                        else
+                                                                                                                        {
+                                                                                                                            var getIntEstWallRemain = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Wall Loss Analysis"
+                                                                        && x.Label.ToString() == "Estimated Wall Remaining").FirstOrDefault();
+                                                                                                                            if (getIntEstWallRemain != null && DisplayValue25 != null)
+                                                                                                                            {
+                                                                                                                                IntEstWallRemain = Convert.ToDouble(DisplayValue25.DisplayValue) * 25.4;
+                                                                                                                            }
+                                                                                                                            else if (getIntEstWallRemain != null && ProbabilityLabel25 != null)
+                                                                                                                            {
+                                                                                                                                IntEstWallRemain = Convert.ToDouble(ProbabilityLabel25.Label) * 25.4;
+                                                                                                                            }
+                                                                                                                            else if (getIntEstWallRemain != null && ConsequenceLabel25 != null)
+                                                                                                                            {
+                                                                                                                                IntEstWallRemain = Convert.ToDouble(ConsequenceLabel25.Label) * 25.4;
+                                                                                                                            }
+
+                                                                                                                            else if (getIntEstWallRemain != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                                            {
+                                                                                                                                IntEstWallRemain = Convert.ToDouble(need24.Value25) * 25.4;
+                                                                                                                            }
+                                                                                                                            else
+                                                                                                                            {
+                                                                                                                                var getEstHalfLife = get30.Where(x => !x.GroupName.IsEmpty() && x.GroupName.ToString() == "Calculations"
+                                                                       && x.Label.ToString() == "Estimated Half Life").FirstOrDefault();
+                                                                                                                                if (getEstHalfLife != null && DisplayValue25 != null)
+                                                                                                                                {
+                                                                                                                                    EstHalfLife = DisplayValue25.DisplayValue;
+                                                                                                                                }
+                                                                                                                                else if (getEstHalfLife != null && ProbabilityLabel25 != null)
+                                                                                                                                {
+                                                                                                                                    EstHalfLife = ProbabilityLabel25.Label;
+                                                                                                                                }
+                                                                                                                                else if (getEstHalfLife != null && ConsequenceLabel25 != null)
+                                                                                                                                {
+                                                                                                                                    EstHalfLife = ConsequenceLabel25.Label;
+                                                                                                                                }
+
+                                                                                                                                else if (getEstHalfLife != null && DisplayValue25 == null && ProbabilityLabel25 == null && ConsequenceLabel25 == null)
+                                                                                                                                {
+                                                                                                                                    EstHalfLife = need24.Value25;
+                                                                                                                                }
                                                                                                                                 else
                                                                                                                                 {
 
@@ -1943,9 +2013,9 @@ namespace T0NKME06.Controllers
                                                                                                                                     }
 
                                                                                                                                 }
-                                                                                                                            
-                                                                                                                        
-                                                                                                                    
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -1996,7 +2066,7 @@ namespace T0NKME06.Controllers
                                     }
                                     else if (getODM1 != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                     {
-                                        ODM1 = get24.Value;
+                                        ODM1 = need24.Value;
                                     }
                                     else
                                     {
@@ -2016,7 +2086,7 @@ namespace T0NKME06.Controllers
                                         }
                                         else if (getODM1Potential != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                         {
-                                            ODM1Potential = get24.Value;
+                                            ODM1Potential = need24.Value;
                                         }
                                         else
                                         {
@@ -2037,7 +2107,7 @@ namespace T0NKME06.Controllers
                                             }
                                             else if (getODM1Probability != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                             {
-                                                ODM1Probability = get24.Value;
+                                                ODM1Probability = need24.Value;
                                             }
                                             else
                                             {
@@ -2057,7 +2127,7 @@ namespace T0NKME06.Controllers
                                                 }
                                                 else if (getODM1Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                 {
-                                                    ODM1Comment = get24.Value;
+                                                    ODM1Comment = need24.Value;
                                                 }
                                                 else
                                                 {
@@ -2077,7 +2147,7 @@ namespace T0NKME06.Controllers
                                                     }
                                                     else if (getODM2 != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                     {
-                                                        ODM2 = get24.Value;
+                                                        ODM2 = need24.Value;
                                                     }
                                                     else
                                                     {
@@ -2097,7 +2167,7 @@ namespace T0NKME06.Controllers
                                                         }
                                                         else if (getODM2Potential != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                         {
-                                                            ODM2Potential = get24.Value;
+                                                            ODM2Potential = need24.Value;
                                                         }
                                                         else
                                                         {
@@ -2117,7 +2187,7 @@ namespace T0NKME06.Controllers
                                                             }
                                                             else if (getODM2Probability != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                             {
-                                                                ODM2Probability = get24.Value;
+                                                                ODM2Probability = need24.Value;
                                                             }
                                                             else
                                                             {
@@ -2137,7 +2207,7 @@ namespace T0NKME06.Controllers
                                                                 }
                                                                 else if (getODM2Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                 {
-                                                                    ODM2Comment = get24.Value;
+                                                                    ODM2Comment = need24.Value;
                                                                 }
                                                                 else
                                                                 {
@@ -2157,7 +2227,7 @@ namespace T0NKME06.Controllers
                                                                     }
                                                                     else if (getODM3 != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                     {
-                                                                        ODM3 = get24.Value;
+                                                                        ODM3 = need24.Value;
                                                                     }
                                                                     else
                                                                     {
@@ -2177,7 +2247,7 @@ namespace T0NKME06.Controllers
                                                                         }
                                                                         else if (getODM3Potential != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                         {
-                                                                            ODM3Potential = get24.Value;
+                                                                            ODM3Potential = need24.Value;
                                                                         }
                                                                         else
                                                                         {
@@ -2197,7 +2267,7 @@ namespace T0NKME06.Controllers
                                                                             }
                                                                             else if (getODM3Probability != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                             {
-                                                                                ODM3Probability = get24.Value;
+                                                                                ODM3Probability = need24.Value;
                                                                             }
                                                                             else
                                                                             {
@@ -2217,7 +2287,7 @@ namespace T0NKME06.Controllers
                                                                                 }
                                                                                 else if (getODM3Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                 {
-                                                                                    ODM3Comment = get24.Value;
+                                                                                    ODM3Comment = need24.Value;
                                                                                 }
                                                                                 else
                                                                                 {
@@ -2237,7 +2307,7 @@ namespace T0NKME06.Controllers
                                                                                     }
                                                                                     else if (getODM4 != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                     {
-                                                                                        ODM4 = get24.Value;
+                                                                                        ODM4 = need24.Value;
                                                                                     }
                                                                                     else
                                                                                     {
@@ -2257,7 +2327,7 @@ namespace T0NKME06.Controllers
                                                                                         }
                                                                                         else if (getODM4Potential != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                         {
-                                                                                            ODM4Potential = get24.Value;
+                                                                                            ODM4Potential = need24.Value;
                                                                                         }
                                                                                         else
                                                                                         {
@@ -2277,7 +2347,7 @@ namespace T0NKME06.Controllers
                                                                                             }
                                                                                             else if (getODM4Probability != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                             {
-                                                                                                ODM4Probability = get24.Value;
+                                                                                                ODM4Probability = need24.Value;
                                                                                             }
                                                                                             else
                                                                                             {
@@ -2297,7 +2367,7 @@ namespace T0NKME06.Controllers
                                                                                                 }
                                                                                                 else if (getODM4Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                 {
-                                                                                                    ODM4Comment = get24.Value;
+                                                                                                    ODM4Comment = need24.Value;
                                                                                                 }
                                                                                                 else
                                                                                                 {
@@ -2317,7 +2387,7 @@ namespace T0NKME06.Controllers
                                                                                                     }
                                                                                                     else if (getODM5 != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                     {
-                                                                                                        ODM5 = get24.Value;
+                                                                                                        ODM5 = need24.Value;
                                                                                                     }
                                                                                                     else
                                                                                                     {
@@ -2337,7 +2407,7 @@ namespace T0NKME06.Controllers
                                                                                                         }
                                                                                                         else if (getODM5Potential != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                         {
-                                                                                                            ODM5Potential = get24.Value;
+                                                                                                            ODM5Potential = need24.Value;
                                                                                                         }
                                                                                                         else
                                                                                                         {
@@ -2357,7 +2427,7 @@ namespace T0NKME06.Controllers
                                                                                                             }
                                                                                                             else if (getODM5Probability != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                             {
-                                                                                                                ODM5Probability = get24.Value;
+                                                                                                                ODM5Probability = need24.Value;
                                                                                                             }
                                                                                                             else
                                                                                                             {
@@ -2378,7 +2448,7 @@ namespace T0NKME06.Controllers
 
                                                                                                                 else if (getODM5Comment != null && DisplayValue == null && ProbabilityLabel == null && ConsequenceLabel == null)
                                                                                                                 {
-                                                                                                                    ODM5Comment = get24.Value;
+                                                                                                                    ODM5Comment = need24.Value;
                                                                                                                 }
                                                                                                             }
                                                                                                         }
@@ -2524,13 +2594,11 @@ namespace T0NKME06.Controllers
                             need24.RepThick = RepThick;
 
 
-                        });
+
                         }
-                            
 
 
                     });
-
 
 
                     string end = (DateTime.Now.ToString("HH:mm ss tt"));
@@ -2560,8 +2628,6 @@ namespace T0NKME06.Controllers
             {
                 return BadRequest(ex.ToString());
             }
-
-         
 
 
 

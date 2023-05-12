@@ -11,8 +11,7 @@ namespace T0NKME06.Models
     {
         public string InspectionPlanTaskId38 { get; set; }
         public string HeaderText { get; set; }
-        public string InspectionPlanTaskId { get; set; }
-        public string MitigationColumnId { get; set; }
+        
 
 
         [Display(Name = "組織Id")]
@@ -86,7 +85,7 @@ namespace T0NKME06.Models
         [Display(Name = "檢測到期日")]
         public string DueDate { get; set; }
         [Display(Name = "自訂檢測到期日註記")]
-        public string IsStaticDueDate { get; set; }
+        public Boolean IsStaticDueDate { get; set; }
         [Display(Name = "上次檢測日")]
         public string HistoricInspectionDate { get; set; }
         [Display(Name = "主要檢測方法ID")]
@@ -95,7 +94,7 @@ namespace T0NKME06.Models
         public string ManualLastInspectionDate { get; set; }
         [Display(Name = "檢測位置")]
         public string LOCATION { get; set; }
-        public string LOCATION2 { get; set; }
+        //public string LOCATION2 { get; set; }
         [Display(Name = "可執行時機")]
         public string AVAILABILITY { get; set; }
         [Display(Name = "建議穿透保溫數量")]
@@ -124,6 +123,11 @@ namespace T0NKME06.Models
 
         [Display(Name = "建議垂直管數量")]
         public string NoVertRunRdgs { get; set; }
+
+        public string InspectionPlanTaskId { get; set; }
+        public string MitigationColumnId { get; set; }
+
+        //public string MitigationColumnId { get; set; }
 
     }
 }
